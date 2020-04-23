@@ -8,15 +8,15 @@
         Title="MainWindow" Height="408.5" Width="667.5"
         SizeToContent="WidthAndHeight">
     <Window.Resources>
-        <local:Station x:Key="MyFriends"/>
+        <local:CharmShahr x:Key="_Station"/>
         <Style TargetType="ListBoxItem">
             <Setter Property="FontFamily" Value="Verdana"/>
-            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontSize" Value="12"/>
             <Setter Property="Padding" Value="10"/>
         </Style>
         <DataTemplate x:Key="DetailTemplate">
             <Border Width="Auto" Height="Auto" Margin="10,0,0,0"
-              BorderBrush="Aqua" BorderThickness="5" Padding="10">
+              BorderBrush="Bisque" BorderThickness="5" Padding="10">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
@@ -51,10 +51,10 @@
         <TextBlock FontFamily="Verdana" FontSize="11"
                Margin="10,10,29,0" FontWeight="Bold" Height="24" VerticalAlignment="Top"  Grid.Column="0"  Grid.Row="0" Grid.RowSpan="2">My Friends:</TextBlock>
         <ListBox IsSynchronizedWithCurrentItem="True"
-             ItemsSource="{Binding Source={StaticResource MyFriends}}" Margin="10,0,0,10" Grid.Row="1" HorizontalAlignment="Left" Width="128"/>
+             ItemsSource="{Binding Source={StaticResource _Station} , Path=Units}" Margin="10,0,0,10" Grid.Row="1" HorizontalAlignment="Left" Width="128"/>
         <TextBlock FontFamily="Verdana" FontSize="11"
                Margin="10,10,327,0" FontWeight="Bold" Height="24" VerticalAlignment="Top" Grid.Column="1"  Grid.Row="0" Grid.RowSpan="2" >Informations:</TextBlock>
-        <ContentControl Content="{Binding Source={StaticResource MyFriends}}"
+        <ContentControl Content="{Binding Source={StaticResource _Station}, Path=Units}"
                     ContentTemplate="{StaticResource DetailTemplate}" Margin="0,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Grid.Row="1" Height="118" Width="329"/>
     </Grid>
 </Window>
