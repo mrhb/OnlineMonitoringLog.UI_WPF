@@ -5,8 +5,56 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OnlineMonitoringLog.UI_WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
+        Title="MainWindow" Height="408.5" Width="667.5"
+        SizeToContent="WidthAndHeight">
+    <Window.Resources>
+        <local:Station x:Key="MyFriends"/>
+        <Style TargetType="ListBoxItem">
+            <Setter Property="FontFamily" Value="Verdana"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10"/>
+        </Style>
+        <DataTemplate x:Key="DetailTemplate">
+            <Border Width="Auto" Height="Auto" Margin="10,0,0,0"
+              BorderBrush="Aqua" BorderThickness="5" Padding="10">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="First Name:"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=FirstName}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Last Name:"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Path=LastName}"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Home Town:"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Path=HomeTown}"/>
+                </Grid>
+            </Border>
+        </DataTemplate>
+
+    </Window.Resources>
+
+    <Grid Margin="0,0,0,9">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="151"/>
+            <ColumnDefinition Width="Auto" MinWidth="509"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="33"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBlock FontFamily="Verdana" FontSize="11"
+               Margin="10,10,29,0" FontWeight="Bold" Height="24" VerticalAlignment="Top"  Grid.Column="0"  Grid.Row="0" Grid.RowSpan="2">My Friends:</TextBlock>
+        <ListBox IsSynchronizedWithCurrentItem="True"
+             ItemsSource="{Binding Source={StaticResource MyFriends}}" Margin="10,0,0,10" Grid.Row="1" HorizontalAlignment="Left" Width="128"/>
+        <TextBlock FontFamily="Verdana" FontSize="11"
+               Margin="10,10,327,0" FontWeight="Bold" Height="24" VerticalAlignment="Top" Grid.Column="1"  Grid.Row="0" Grid.RowSpan="2" >Informations:</TextBlock>
+        <ContentControl Content="{Binding Source={StaticResource MyFriends}}"
+                    ContentTemplate="{StaticResource DetailTemplate}" Margin="0,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Grid.Row="1" Height="118" Width="329"/>
     </Grid>
 </Window>

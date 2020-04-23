@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CollectionBinding;
 
 namespace OnlineMonitoringLog.UI_WPF
 {
@@ -20,9 +21,13 @@ namespace OnlineMonitoringLog.UI_WPF
     /// </summary>
     public partial class MainWindow : Window
     {
+        Station MyFriends = new Station();
         public MainWindow()
         {
+            MyFriends.add();
             InitializeComponent();
+        
+
         }
     }
 }
