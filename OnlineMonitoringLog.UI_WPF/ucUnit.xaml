@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="OnlineMonitoringLog.UI_WPF.ucUnit"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:OnlineMonitoringLog.UI_WPF"
+             mc:Ignorable="d" Height="140.782" Width="315.084">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="ip address:"/>
+        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=ip}"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="id:"/>
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Path=Id}"/>
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="LastUpdateTime:"/>
+        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Path=vairablesData}"/>
+    </Grid>
+</UserControl>
