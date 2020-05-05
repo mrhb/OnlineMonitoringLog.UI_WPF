@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Net;
 using System.Runtime.CompilerServices;
 
@@ -14,39 +15,25 @@ namespace OnlineMonitoringLog.Core
 
     public class Unit : INotifyPropertyChanged
     {
-        private coapVariable _Client;
         private ObservableCollection<coapVariable> _coapVariables= new ObservableCollection<coapVariable>();
         private string _LastUpdateTime;
-        private IPAddress _ip;
+        private IPAddress _Ip;
 
 
 
         public Unit(IPAddress ip)
         {
-
-            _ip = ip;
-            ICoapConfig config = new CoapConfig();
-            // ...
-
-            // create a new client with custom config
-            _Client = new coapVariable(config);
-
-            _Client.Uri = ResourceUri("ServerTime");
-           var observerRel= _Client.ObserveAsync();
-          
-            //_Client..Timeout = 2000;
-            _Client.Respond += Respond;
-
+            Ip = ip;
             var resources = new List<string>() { "ServerTime", "TimeOfDay", "helloworld" };
+
+            for (int i = 0; i < 3; i++)
+            {
+                resources.Add( "TimeOfDay" + i.ToString());
+            }
             foreach (var res in resources)
             {
-               var  Client = new coapVariable(config);
-
-                Client.Uri = ResourceUri(res);
-                Client.ObserveAsync();
-
+               var  Client = new coapVariable(_Ip,res);
                 Client.Respond += Respond;
-
                 _coapVariables.Add(Client);
             }
 
@@ -54,18 +41,19 @@ namespace OnlineMonitoringLog.Core
 
         private void Respond(object sender, ResponseEventArgs e)
         {
-            LastUpdateTime = e.Response.ResponseText;
+            LastUpdateTime =DateTime.Now.ToString();
         }
 
         public string LastUpdateTime
         {
             get { return _LastUpdateTime; }
-            set
+            private set
             {
                 _LastUpdateTime = value;
                 NotifyPropertyChanged("LastUpdateTime");
             }
         }
+        [NotMapped]
         public ObservableCollection<coapVariable> coapVariables
         {
             get { return _coapVariables; }
@@ -75,20 +63,18 @@ namespace OnlineMonitoringLog.Core
                 NotifyPropertyChanged("Units");
             }
         }
-        public IPAddress ip
+        public int ID { get; set; }
+        public IPAddress Ip
         {
-            get { return _ip; }
-            set
+            get { return _Ip; }
+            private set
             {
-                _ip = value;
+                _Ip = value;
                 NotifyPropertyChanged("ip");
             }
         }
-        private Uri ResourceUri(string resourceName)
-        {
-           return new Uri("coap://" + _ip.ToString() + "/"+ resourceName);
-        }
-        public override string ToString() { return ip.ToString(); }
+    
+        public override string ToString() { return Ip.ToString(); }
         public event PropertyChangedEventHandler PropertyChanged;
         // This method is called by the Set accessor of each property.  
         // The CallerMemberName attribute that is applied to the optional propertyName  
@@ -97,27 +83,38 @@ namespace OnlineMonitoringLog.Core
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
+     private Uri ResourceUri(string resourceName)
+        {
+            return new Uri("coap://" + _Ip.ToString() + "/" + resourceName);
+        }
     }
     public class coapVariable:CoapClient,INotifyPropertyChanged
     {
         string _value= "Not assigned";
+        DateTime _timeStamp =new DateTime();
         string _resource = "Not assigned";
-        public coapVariable(ICoapConfig config) : base(config) {
+        public coapVariable(IPAddress ip,string resourceName) : base() {
+            resource = resourceName;
+            Uri = new Uri("coap://" + ip.ToString() + "/" + resourceName);
+            ObserveAsync();
             this.Respond += RecievedRespond;
         }
-
         private void RecievedRespond(object sender, ResponseEventArgs e)
         {
-         value  = e.Response.ResponseText;
+            value  = e.Response.ResponseText;
+            timeStamp = DateTime.Now;
         }
         public string resource
         {
             get
             {
-                return this.Uri.AbsolutePath;
+                return _resource;
             }
-          
+            set
+            {
+                _resource = value;
+                NotifyPropertyChanged("value");
+            }
         }
         public string value
         {
@@ -128,6 +125,18 @@ namespace OnlineMonitoringLog.Core
             set
             {
                 _value = value;
+                NotifyPropertyChanged("value");
+            }
+        }
+        public DateTime timeStamp
+        {
+            get
+            {
+                return _timeStamp;
+            }
+            set
+            {
+                _timeStamp = value;
                 NotifyPropertyChanged("value");
             }
         }

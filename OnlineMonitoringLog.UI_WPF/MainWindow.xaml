@@ -7,7 +7,7 @@
         xmlns:core="clr-namespace:OnlineMonitoringLog.Core"
         mc:Ignorable="d"
         xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
-        Title="MainWindow" Height="345.5" Width="604.5"
+        Title="MainWindow" Height="480" Width="634"
         SizeToContent="WidthAndHeight">
     <Window.Resources>
         <local:CharmShahr x:Key="_Station"/>
@@ -28,7 +28,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="ip address:"/>
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=ip}"/>
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=Ip}"/>
 
                 <TextBlock Grid.Row="2" Grid.Column="0" Text="LastUpdateTime:"/>
                 <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Path=LastUpdateTime}"/>
@@ -37,27 +37,27 @@
         </DataTemplate>
 
         <DataTemplate x:Key="VariablesTemplate"  DataType="{x:Type  core:Unit}">
-            <DataGrid x:Name="myDataGrid" AutoGenerateColumns="True"      ItemsSource="{Binding Path=coapVariables}">
+            <DataGrid   x:Name="myDataGrid" 
+                 ItemsSource="{Binding Path=coapVariables}" />
 
-            </DataGrid>
 
         </DataTemplate>
     </Window.Resources>
 
     <Grid Margin="-9,0,0,-2">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="138"/>
-            <ColumnDefinition Width="Auto" MinWidth="522"/>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="Auto" MinWidth="450"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="33"/>
             <RowDefinition Height="64"/>
-            <RowDefinition/>
+            <RowDefinition Height="354"/>
         </Grid.RowDefinitions>
         <TextBlock FontFamily="Verdana" FontSize="11"
-               Margin="10,10,29,0" FontWeight="Bold" Height="24" VerticalAlignment="Top"  Grid.Column="0"  Grid.Row="0" Grid.RowSpan="2">My Friends:</TextBlock>
+               Margin="19,10,10,0" FontWeight="Bold" Height="24" VerticalAlignment="Top"  Grid.Column="0"  Grid.Row="0" Grid.RowSpan="2">Generation Units:</TextBlock>
         <ListBox  x:Name="UnitList" IsSynchronizedWithCurrentItem="True"
-             ItemsSource="{Binding Source={StaticResource _Station} , Path=Units }"  SelectedItem="{Binding Path=SelectedUnit, Mode=TwoWay}" SelectionMode="Single"  Margin="19,0,0,10" Grid.Row="1" HorizontalAlignment="Left" Width="109" SelectionChanged="ListBox_SelectionChanged" Grid.RowSpan="2">
+             ItemsSource="{Binding Source={StaticResource _Station} , Path=Units }"  SelectedItem="{Binding Path=SelectedUnit, Mode=TwoWay}" SelectionMode="Single"  Margin="19,0,0,10" Grid.Row="1" HorizontalAlignment="Left" Width="122" SelectionChanged="ListBox_SelectionChanged" Grid.RowSpan="2">
         </ListBox>
         <TextBlock FontFamily="Verdana" FontSize="11"
                Margin="10,10,327,0" FontWeight="Bold" Height="24" VerticalAlignment="Top" Grid.Column="1"  Grid.Row="0" Grid.RowSpan="2" >Informations:</TextBlock>
@@ -65,7 +65,7 @@
                     ContentTemplate="{StaticResource DetailTemplate}" Margin="10,10,0,10" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" Width="239"/>
 
         <ContentControl Content="{Binding Source={StaticResource _Station}, Path=Units}"
-                    ContentTemplate="{StaticResource VariablesTemplate}" Margin="10,1,65,10" Grid.Column="1" Grid.Row="2"/>
+                    ContentTemplate="{StaticResource VariablesTemplate}" Margin="10,10,1,10" Grid.Column="1" Grid.Row="2"/>
 
 
     </Grid>

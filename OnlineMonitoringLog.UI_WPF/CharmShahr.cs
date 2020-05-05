@@ -3,6 +3,8 @@
 
 
 using OnlineMonitoringLog.Core;
+using OnlineMonitoringLog.UI_WPF.model;
+using System;
 using System.Collections.Generic;
 using System.Net;
 
@@ -12,7 +14,8 @@ namespace OnlineMonitoringLog.UI_WPF
     {
         public CharmShahr()
         {
-            Units.Add(new Unit(IPAddress.Parse("192.168.1.19")));
+
+            Units.Add(new Unit(IPAddress.Parse("192.168.1.29")));
             Units.Add(new Unit(IPAddress.Parse("192.168.1.19")));
 
             selectedUnit = Units[0];
@@ -21,6 +24,7 @@ namespace OnlineMonitoringLog.UI_WPF
             var list = new List<Unit>(obsCollection);
 
             this.Start(list);
+            
         }
         Unit selectedUnit;
         public Unit SelectedUnit
