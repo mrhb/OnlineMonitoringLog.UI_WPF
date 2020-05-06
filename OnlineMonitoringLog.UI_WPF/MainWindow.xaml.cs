@@ -5,7 +5,9 @@ using System.Windows.Controls;
 using OnlineMonitoringLog.UI_WPF.model;
 
 using System.Linq;
-
+using System.Collections.Generic;
+using System.Net;
+using System.Windows.Data;
 
 namespace OnlineMonitoringLog.UI_WPF
 {
@@ -14,19 +16,23 @@ namespace OnlineMonitoringLog.UI_WPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        StationViewModel Station;
-      
+     
         public MainWindow()
         {
-           
-                InitializeComponent();
-           
+            InitializeComponent();
+
+
+            using (var db = new LogingContext())
+            {
+                var UnitEntities = db.Units.ToList();
+
+                StationViewModel Station = new StationViewModel();
+                Station.StationViewModelBy(new Station(UnitEntities));
+
+                DataContext = Station;      
+
+            }            
         }
 
-        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Station = (StationViewModel)this.Resources["_Station"];
-        
-        }
     }
 }

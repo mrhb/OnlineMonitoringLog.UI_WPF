@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OnlineMonitoringLog.UI_WPF"
 
+ 
         mc:Ignorable="d"
         xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
-        Title="MainWindow" Height="480" Width="634"
+        Title="Monitoring system for Units In a Station(CoAP Client)" Height="480" Width="634"
         SizeToContent="WidthAndHeight">
     <Window.Resources>
         <local:StationViewModel x:Key="_Station"/>
@@ -57,16 +58,13 @@
         <TextBlock FontFamily="Verdana" FontSize="11"
                Margin="19,10,10,0" FontWeight="Bold" Height="24" VerticalAlignment="Top"  Grid.Column="0"  Grid.Row="0" Grid.RowSpan="2">Generation Units:</TextBlock>
         <ListBox  x:Name="UnitList" IsSynchronizedWithCurrentItem="True"
-             ItemsSource="{Binding Source={StaticResource _Station} , Path=Units }"  SelectedItem="{Binding Path=SelectedUnit, Mode=TwoWay}" SelectionMode="Single"  Margin="19,0,0,10" Grid.Row="1" HorizontalAlignment="Left" Width="122" SelectionChanged="ListBox_SelectionChanged" Grid.RowSpan="2">
+             ItemsSource="{ Binding  Path=Units }"  SelectedItem="{Binding Path=SelectedUnit, Mode=TwoWay}" SelectionMode="Single"  Margin="19,10,0,10" Grid.Row="1" HorizontalAlignment="Left" Width="122"  Grid.RowSpan="2">
         </ListBox>
         <TextBlock FontFamily="Verdana" FontSize="11"
                Margin="10,10,327,0" FontWeight="Bold" Height="24" VerticalAlignment="Top" Grid.Column="1"  Grid.Row="0" Grid.RowSpan="2" >Informations:</TextBlock>
-        <ContentControl Content="{Binding Source={StaticResource _Station}, Path=st.Units}"
+        <ContentControl x:Name="Info" Content="{Binding Path=SelectedItem, ElementName=UnitList}" 
                     ContentTemplate="{StaticResource DetailTemplate}" Margin="10,10,0,10" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" Width="239"/>
-
-        <ContentControl Content="{Binding Source={StaticResource _Station}, Path=Units}"
+        <ContentControl x:Name="Variables" Content="{Binding Path=SelectedItem, ElementName=UnitList}"
                     ContentTemplate="{StaticResource VariablesTemplate}" Margin="10,10,1,10" Grid.Column="1" Grid.Row="2"/>
-
-
     </Grid>
 </Window>

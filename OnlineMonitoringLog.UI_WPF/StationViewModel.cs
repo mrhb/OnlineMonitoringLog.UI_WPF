@@ -15,32 +15,12 @@ namespace OnlineMonitoringLog.UI_WPF
         public StationViewModel()
         {
             st = new Station(new List<Unit>() {new Unit(IPAddress.Parse("192.168.1.19")) });
-
-            //using (var db = new LogingContext())
-            //{
-            //    //db.Units.Add(new Unit(System.Net.IPAddress.Parse("192.168.1.1")));
-            //    var UnitEntities = db.Units.ToList();
-
-            //    st = new Station(UnitEntities);
-
-
-            //}
-
-
-
-
-
-
-            //Units.Add(new Unit(IPAddress.Parse("192.168.1.19")));
-            //Units.Add(new Unit(IPAddress.Parse("192.168.1.29")));
-
-            //selectedUnit = Units[0];
-
-            //IEnumerable<Unit> obsCollection = (IEnumerable<Unit>)Units;
-            //var list = new List<Unit>(obsCollection);
-
-
-
+        }
+        public StationViewModel StationViewModelBy(Station _St)
+        {
+            st = _St;
+            SelectedUnit = Units.FirstOrDefault();
+            return this;
         }
         Unit selectedUnit;
         public Unit SelectedUnit
@@ -55,7 +35,6 @@ namespace OnlineMonitoringLog.UI_WPF
                 }
             }
         }
-
         public ReadOnlyObservableUnitCollection Units
         {
             get {

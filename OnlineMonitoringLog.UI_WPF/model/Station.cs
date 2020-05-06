@@ -15,17 +15,25 @@ namespace OnlineMonitoringLog.UI_WPF.model
     public class Station : INotifyPropertyChanged
     {
         const string _name="CharmShahr";
-        private List<Unit> unitList;
-
+        private List<Unit> _unitList;
         public Station(List<Unit> units)
         {
-            unitList = units;
+            UnitList = units;
+            foreach (var item in UnitList)
+            {
+                item.Initialize();
+            }
         }
         public List<Unit> UnitList
         {
             get
             {
-                return unitList;
+                return _unitList;
+            }
+            set
+            {
+                _unitList = value;
+                NotifyPropertyChanged("UnitList");
             }
         }             
        

@@ -24,7 +24,7 @@ namespace OnlineMonitoringLog.UI_WPF.model
             Ip = ip;
             Initialize();         
         }
-    void Initialize()
+   public void Initialize()
     {
 
         var resources = new List<string>() { "ServerTime", "TimeOfDay", "helloworld" };
