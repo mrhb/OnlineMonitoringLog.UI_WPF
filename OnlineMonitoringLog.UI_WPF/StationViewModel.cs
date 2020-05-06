@@ -58,7 +58,10 @@ namespace OnlineMonitoringLog.UI_WPF
 
         public ReadOnlyObservableUnitCollection Units
         {
-            get { return st.Units; }
+            get {
+               
+                return new ReadOnlyObservableUnitCollection(st.UnitList);
+            }
             set
             {
                 if (value != _units)

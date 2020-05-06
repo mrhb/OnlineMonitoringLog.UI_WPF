@@ -7,6 +7,7 @@ using System;
 using System.Net;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Linq;
 
 namespace OnlineMonitoringLog.UI_WPF.model
 {
@@ -14,21 +15,20 @@ namespace OnlineMonitoringLog.UI_WPF.model
     public class Station : INotifyPropertyChanged
     {
         const string _name="CharmShahr";
-        private ReadOnlyObservableUnitCollection _units;
+        private List<Unit> unitList;
 
         public Station(List<Unit> units)
         {
-            _units = new ReadOnlyObservableUnitCollection(units);
+            unitList = units;
         }
-               
-        public ReadOnlyObservableUnitCollection Units
-        { get { return _units; }
-            set
+        public List<Unit> UnitList
+        {
+            get
             {
-                _units = value;
-                NotifyPropertyChanged("Units");
+                return unitList;
             }
-        }
+        }             
+       
         public event PropertyChangedEventHandler PropertyChanged;
         // This method is called by the Set accessor of each property.  
         // The CallerMemberName attribute that is applied to the optional propertyName  
@@ -37,8 +37,5 @@ namespace OnlineMonitoringLog.UI_WPF.model
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-
-
     }
 }
