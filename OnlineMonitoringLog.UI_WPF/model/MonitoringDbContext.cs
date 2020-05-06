@@ -1,22 +1,10 @@
-﻿using OnlineMonitoringLog.Core;
-using System;
+﻿
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace OnlineMonitoringLog.UI_WPF.model
 {
-  
-    public class MonitoringDbContext : DbContext
-    {
-        public MonitoringDbContext() : base("name = MyContextDB") { }
-        public virtual DbSet<Unit> Units { get; set; }
-       
-    }
-
-
     public class Blog
     {
         public int BlogId { get; set; }
@@ -35,10 +23,10 @@ namespace OnlineMonitoringLog.UI_WPF.model
         public virtual Blog Blog { get; set; }
     }
 
-    public class BloggingContext : DbContext
+    public class LogingContext : DbContext
     {
-        public BloggingContext() : base("name = Default") { }
-        public DbSet<Blog> Blogs { get; set; }
-        public DbSet<Post> Posts { get; set; }
+        public LogingContext() : base("name = Default") { }
+        public virtual DbSet<Unit> Units { get; set; }
+      
     }
 }

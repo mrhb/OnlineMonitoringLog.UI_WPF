@@ -4,13 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OnlineMonitoringLog.UI_WPF"
-        xmlns:core="clr-namespace:OnlineMonitoringLog.Core"
+
         mc:Ignorable="d"
         xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
         Title="MainWindow" Height="480" Width="634"
         SizeToContent="WidthAndHeight">
     <Window.Resources>
-        <local:CharmShahr x:Key="_Station"/>
+        <local:StationViewModel x:Key="_Station"/>
         <Style TargetType="ListBoxItem">
             <Setter Property="FontFamily" Value="Verdana"/>
 
@@ -36,7 +36,7 @@
 
         </DataTemplate>
 
-        <DataTemplate x:Key="VariablesTemplate"  DataType="{x:Type  core:Unit}">
+        <DataTemplate x:Key="VariablesTemplate">
             <DataGrid   x:Name="myDataGrid" 
                  ItemsSource="{Binding Path=coapVariables}" />
 
@@ -61,7 +61,7 @@
         </ListBox>
         <TextBlock FontFamily="Verdana" FontSize="11"
                Margin="10,10,327,0" FontWeight="Bold" Height="24" VerticalAlignment="Top" Grid.Column="1"  Grid.Row="0" Grid.RowSpan="2" >Informations:</TextBlock>
-        <ContentControl Content="{Binding Source={StaticResource _Station}, Path=Units}"
+        <ContentControl Content="{Binding Source={StaticResource _Station}, Path=st.Units}"
                     ContentTemplate="{StaticResource DetailTemplate}" Margin="10,10,0,10" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" Width="239"/>
 
         <ContentControl Content="{Binding Source={StaticResource _Station}, Path=Units}"

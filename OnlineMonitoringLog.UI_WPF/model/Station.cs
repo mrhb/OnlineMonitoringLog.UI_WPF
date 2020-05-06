@@ -8,16 +8,20 @@ using System.Net;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-namespace OnlineMonitoringLog.Core
+namespace OnlineMonitoringLog.UI_WPF.model
 {
 
     public class Station : INotifyPropertyChanged
     {
         const string _name="CharmShahr";
-        private ObservableCollection<Unit> _units = new ObservableCollection<Unit>();
+        private ReadOnlyObservableUnitCollection _units;
 
-       
-        public ObservableCollection<Unit> Units
+        public Station(List<Unit> units)
+        {
+            _units = new ReadOnlyObservableUnitCollection(units);
+        }
+               
+        public ReadOnlyObservableUnitCollection Units
         { get { return _units; }
             set
             {
@@ -25,22 +29,6 @@ namespace OnlineMonitoringLog.Core
                 NotifyPropertyChanged("Units");
             }
         }
-
-
-
-        public Station( )
-        {
-           
-        }
-
-        public void Start(List<Unit> UnitList)
-        {    
-          
-
-        }
-
-
-
         public event PropertyChangedEventHandler PropertyChanged;
         // This method is called by the Set accessor of each property.  
         // The CallerMemberName attribute that is applied to the optional propertyName  

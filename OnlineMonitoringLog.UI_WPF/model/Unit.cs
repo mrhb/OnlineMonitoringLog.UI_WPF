@@ -10,7 +10,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Net;
 using System.Runtime.CompilerServices;
 
-namespace OnlineMonitoringLog.Core
+namespace OnlineMonitoringLog.UI_WPF.model
 {
 
     public class Unit : INotifyPropertyChanged
@@ -18,27 +18,28 @@ namespace OnlineMonitoringLog.Core
         private ObservableCollection<coapVariable> _coapVariables= new ObservableCollection<coapVariable>();
         private string _LastUpdateTime;
         private IPAddress _Ip;
-
-
-
+        public Unit() { }
         public Unit(IPAddress ip)
         {
             Ip = ip;
-            var resources = new List<string>() { "ServerTime", "TimeOfDay", "helloworld" };
-
-            for (int i = 0; i < 3; i++)
-            {
-                resources.Add( "TimeOfDay" + i.ToString());
-            }
-            foreach (var res in resources)
-            {
-               var  Client = new coapVariable(_Ip,res);
-                Client.Respond += Respond;
-                _coapVariables.Add(Client);
-            }
-
+            Initialize();         
         }
+    void Initialize()
+    {
 
+        var resources = new List<string>() { "ServerTime", "TimeOfDay", "helloworld" };
+
+        for (int i = 0; i < 3; i++)
+        {
+            resources.Add("TimeOfDay" + i.ToString());
+        }
+        foreach (var res in resources)
+        {
+            var Client = new coapVariable(_Ip, res);
+            Client.Respond += Respond;
+            _coapVariables.Add(Client);
+        }
+    }
         private void Respond(object sender, ResponseEventArgs e)
         {
             LastUpdateTime =DateTime.Now.ToString();
@@ -53,6 +54,7 @@ namespace OnlineMonitoringLog.Core
                 NotifyPropertyChanged("LastUpdateTime");
             }
         }
+
         [NotMapped]
         public ObservableCollection<coapVariable> coapVariables
         {
@@ -64,6 +66,8 @@ namespace OnlineMonitoringLog.Core
             }
         }
         public int ID { get; set; }
+
+        [NotMapped]
         public IPAddress Ip
         {
             get { return _Ip; }
@@ -73,7 +77,16 @@ namespace OnlineMonitoringLog.Core
                 NotifyPropertyChanged("ip");
             }
         }
-    
+        public string StringIp {
+            get
+            {
+                return _Ip.ToString();
+            }
+            set
+            {
+                Ip = IPAddress.Parse(value);
+            }
+        }
         public override string ToString() { return Ip.ToString(); }
         public event PropertyChangedEventHandler PropertyChanged;
         // This method is called by the Set accessor of each property.  
@@ -137,7 +150,7 @@ namespace OnlineMonitoringLog.Core
             set
             {
                 _timeStamp = value;
-                NotifyPropertyChanged("value");
+                NotifyPropertyChanged("timeStamp");
             }
         }
         public event PropertyChangedEventHandler PropertyChanged;
