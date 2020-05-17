@@ -22,12 +22,15 @@ namespace OnlineMonitoringLog.UI_WPF
             InitializeComponent();
 
 
-            using (var db = new LogingContext())
+            using (var db = new LoggingContext())
             {
                 var UnitEntities = db.Units.ToList();
 
+                List<IUnit> iunits=new List<IUnit>();
+                foreach (var item in UnitEntities) { iunits.Add(new  coapUnit(item.Ip)); }
+
                 StationViewModel Station = new StationViewModel();
-                Station.StationViewModelBy(new Station(UnitEntities));
+                Station.StationViewModelBy(new Station(iunits));
 
                 DataContext = Station;      
 

@@ -14,7 +14,7 @@ namespace OnlineMonitoringLog.UI_WPF
         ReadOnlyObservableUnitCollection _units;
         public StationViewModel()
         {
-            st = new Station(new List<Unit>() {new Unit(IPAddress.Parse("192.168.1.19")) });
+            st = new Station(new List<IUnit>() {new coapUnit(IPAddress.Parse("192.168.1.19")) });
         }
         public StationViewModel StationViewModelBy(Station _St)
         {
@@ -22,8 +22,8 @@ namespace OnlineMonitoringLog.UI_WPF
             SelectedUnit = Units.FirstOrDefault();
             return this;
         }
-        Unit selectedUnit;
-        public Unit SelectedUnit
+        IUnit selectedUnit;
+        public IUnit SelectedUnit
         {
             get { return selectedUnit; }
             set

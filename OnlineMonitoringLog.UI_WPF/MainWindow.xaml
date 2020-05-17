@@ -39,7 +39,7 @@
 
         <DataTemplate x:Key="VariablesTemplate">
             <DataGrid   x:Name="myDataGrid" 
-                 ItemsSource="{Binding Path=coapVariables}" />
+                 ItemsSource="{Binding Path=Variables}" />
 
 
         </DataTemplate>

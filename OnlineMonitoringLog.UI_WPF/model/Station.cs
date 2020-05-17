@@ -15,8 +15,8 @@ namespace OnlineMonitoringLog.UI_WPF.model
     public class Station : INotifyPropertyChanged
     {
         const string _name="CharmShahr";
-        private List<Unit> _unitList;
-        public Station(List<Unit> units)
+        private List<IUnit> _unitList;
+        public Station(List<IUnit> units)
         {
             UnitList = units;
             foreach (var item in UnitList)
@@ -24,7 +24,7 @@ namespace OnlineMonitoringLog.UI_WPF.model
                 item.Initialize();
             }
         }
-        public List<Unit> UnitList
+        public List<IUnit> UnitList
         {
             get
             {

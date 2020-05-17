@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace OnlineMonitoringLog.UI_WPF.model
 {
-    public class ReadOnlyObservableUnitCollection : ReadOnlyObservableCollection<Unit>
+    public class ReadOnlyObservableUnitCollection : ReadOnlyObservableCollection<IUnit>
     {
-        public ReadOnlyObservableUnitCollection(List<Unit> list) : base(new ObservableCollection<Unit>(list))
+        public ReadOnlyObservableUnitCollection(List<IUnit> list) : base(new ObservableCollection<IUnit>(list))
         {
         }
     }

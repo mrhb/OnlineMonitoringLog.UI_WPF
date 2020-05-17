@@ -5,14 +5,14 @@
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<OnlineMonitoringLog.UI_WPF.model.LogingContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<OnlineMonitoringLog.UI_WPF.model.LoggingContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(OnlineMonitoringLog.UI_WPF.model.LogingContext context)
+        protected override void Seed(OnlineMonitoringLog.UI_WPF.model.LoggingContext context)
         {
             //  This method will be called after migrating to the latest version.
 

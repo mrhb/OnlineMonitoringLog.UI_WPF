@@ -77,15 +77,23 @@
     <Compile Include="Migrations\202005050940089_AddStringIp.designer.cs">
       <DependentUpon>202005050940089_AddStringIp.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202005170738591_addIpToUnits.cs" />
+    <Compile Include="Migrations\202005170738591_addIpToUnits.designer.cs">
+      <DependentUpon>202005170738591_addIpToUnits.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="model\IEC104 Unit And Variable.cs" />
+    <Compile Include="model\IUnit.cs" />
+    <Compile Include="model\IVariable.cs" />
     <Compile Include="model\MonitoringDbContext.cs" />
     <Compile Include="model\ReadOnlyObservableUnitCollection.cs" />
     <Compile Include="model\Station.cs" />
+    <Compile Include="model\Unit.cs" />
     <Compile Include="model\viewModelBase.cs" />
     <Compile Include="ucUnit.xaml.cs">
       <DependentUpon>ucUnit.xaml</DependentUpon>
     </Compile>
-    <Compile Include="model\Unit.cs" />
+    <Compile Include="model\CoAP Unit And Variable.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -120,6 +128,9 @@
     </Compile>
     <EmbeddedResource Include="Migrations\202005050940089_AddStringIp.resx">
       <DependentUpon>202005050940089_AddStringIp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005170738591_addIpToUnits.resx">
+      <DependentUpon>202005170738591_addIpToUnits.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
