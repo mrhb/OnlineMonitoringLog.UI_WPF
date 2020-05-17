@@ -29,10 +29,7 @@ namespace OnlineMonitoringLog.UI_WPF.model
 
         var resources = new List<string>() { "ServerTime", "TimeOfDay", "helloworld" };
 
-        for (int i = 0; i < 3; i++)
-        {
-            resources.Add("TimeOfDay" + i.ToString());
-        }
+
         foreach (var res in resources)
         {
             var Client = new coapVariable(_Ip, res);
@@ -55,7 +52,6 @@ namespace OnlineMonitoringLog.UI_WPF.model
             }
         }
 
-        [NotMapped]
         public ObservableCollection<IVariable> Variables
         {
             get { return _coapVariables; }
@@ -67,7 +63,6 @@ namespace OnlineMonitoringLog.UI_WPF.model
         }
         public int ID { get; set; }
 
-        [NotMapped]
         public IPAddress Ip
         {
             get { return _Ip; }
@@ -95,10 +90,6 @@ namespace OnlineMonitoringLog.UI_WPF.model
         private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-     private Uri ResourceUri(string resourceName)
-        {
-            return new Uri("coap://" + _Ip.ToString() + "/" + resourceName);
         }
     }
 

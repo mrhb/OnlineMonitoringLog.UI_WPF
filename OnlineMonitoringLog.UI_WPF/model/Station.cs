@@ -19,10 +19,7 @@ namespace OnlineMonitoringLog.UI_WPF.model
         public Station(List<IUnit> units)
         {
             UnitList = units;
-            foreach (var item in UnitList)
-            {
-                item.Initialize();
-            }
+           
         }
         public List<IUnit> UnitList
         {
