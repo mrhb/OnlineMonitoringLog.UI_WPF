@@ -6,7 +6,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{33D8F193-99EF-4134-A25B-5F3659774EE8}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OnlineMonitoringLog.UI_WPF</RootNamespace>
     <AssemblyName>OnlineMonitoringLog.UI_WPF</AssemblyName>

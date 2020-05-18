@@ -2,7 +2,6 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using OnlineMonitoringLog.UI_WPF.model;
 
 using System.Linq;
 using System.Collections.Generic;
@@ -24,7 +23,7 @@ namespace OnlineMonitoringLog.UI_WPF
         public MainWindow()
         {
             InitializeComponent();
-          //  MainClass.Maind();
+        //  MaindClass.Maind();
         
 
 
@@ -34,8 +33,8 @@ namespace OnlineMonitoringLog.UI_WPF
 
                 List<IUnit> iunits=new List<IUnit>();
                 foreach (var item in UnitEntities) {
-                    if (item.Ip.ToString() == "127.0.0.1")
-                        iunits.Add(new IEC104Unit(item.Ip));
+                    if (item.Ip.ToString() == "127.0.0.0")
+                        ;//    iunits.Add(new IEC104Unit(item.Ip));
                     else
                         iunits.Add(new coapUnit(item.Ip)); }
 
@@ -48,146 +47,219 @@ namespace OnlineMonitoringLog.UI_WPF
         }
 
     }
-
-    class MainClass
+    class MaindClass
     {
-        private static bool interrogationHandler(object parameter, IMasterConnection connection, ASDU asdu, byte qoi)
+
+        private static void ConnectionHandler(object parameter, ConnectionEvent connectionEvent)
         {
-            Console.WriteLine("Interrogation for group " + qoi);
+            switch (connectionEvent)
+            {
+                case ConnectionEvent.OPENED:
+                    Console.WriteLine("Connected");
+                    break;
+                case ConnectionEvent.CLOSED:
+                    Console.WriteLine("Connection closed");
+                    break;
+                case ConnectionEvent.STARTDT_CON_RECEIVED:
+                    Console.WriteLine("STARTDT CON received");
+                    break;
+                case ConnectionEvent.STOPDT_CON_RECEIVED:
+                    Console.WriteLine("STOPDT CON received");
+                    break;
+            }
+        }
 
-            ApplicationLayerParameters cp = connection.GetApplicationLayerParameters();
+        private static bool asduReceivedHandler(object parameter, ASDU asdu)
+        {
+            Console.WriteLine(asdu.ToString());
 
-            connection.SendACT_CON(asdu, false);
+            if (asdu.TypeId == TypeID.M_SP_NA_1)
+            {
 
-            // send information objects
-            ASDU newAsdu = new ASDU(cp, CauseOfTransmission.INTERROGATED_BY_STATION, false, false, 2, 1, false);
+                for (int i = 0; i < asdu.NumberOfElements; i++)
+                {
 
-            newAsdu.AddInformationObject(new MeasuredValueScaled(100, -1, new QualityDescriptor()));
+                    var val = (SinglePointInformation)asdu.GetElement(i);
 
-            newAsdu.AddInformationObject(new MeasuredValueScaled(101, 23, new QualityDescriptor()));
+                    Console.WriteLine("  IOA: " + val.ObjectAddress + " SP value: " + val.Value);
+                    Console.WriteLine("   " + val.Quality.ToString());
+                }
+            }
+            else if (asdu.TypeId == TypeID.M_ME_TE_1)
+            {
 
-            newAsdu.AddInformationObject(new MeasuredValueScaled(102, 2300, new QualityDescriptor()));
+                for (int i = 0; i < asdu.NumberOfElements; i++)
+                {
 
-            connection.SendASDU(newAsdu);
+                    var msv = (MeasuredValueScaledWithCP56Time2a)asdu.GetElement(i);
 
-            newAsdu = new ASDU(cp, CauseOfTransmission.INTERROGATED_BY_STATION, false, false, 3, 1, false);
+                    Console.WriteLine("  IOA: " + msv.ObjectAddress + " scaled value: " + msv.ScaledValue);
+                    Console.WriteLine("   " + msv.Quality.ToString());
+                    Console.WriteLine("   " + msv.Timestamp.ToString());
+                }
 
-            newAsdu.AddInformationObject(new MeasuredValueScaledWithCP56Time2a(103, 3456, new QualityDescriptor(), new CP56Time2a(DateTime.Now)));
+            }
+            else if (asdu.TypeId == TypeID.M_ME_TF_1)
+            {
 
-            connection.SendASDU(newAsdu);
+                for (int i = 0; i < asdu.NumberOfElements; i++)
+                {
+                    var mfv = (MeasuredValueShortWithCP56Time2a)asdu.GetElement(i);
 
-            newAsdu = new ASDU(cp, CauseOfTransmission.INTERROGATED_BY_STATION, false, false, 2, 1, false);
+                    Console.WriteLine("  IOA: " + mfv.ObjectAddress + " float value: " + mfv.Value);
+                    Console.WriteLine("   " + mfv.Quality.ToString());
+                    Console.WriteLine("   " + mfv.Timestamp.ToString());
+                    Console.WriteLine("   " + mfv.Timestamp.GetDateTime().ToString());
+                }
+            }
+            else if (asdu.TypeId == TypeID.M_SP_TB_1)
+            {
 
-            newAsdu.AddInformationObject(new SinglePointWithCP56Time2a(104, true, new QualityDescriptor(), new CP56Time2a(DateTime.Now)));
+                for (int i = 0; i < asdu.NumberOfElements; i++)
+                {
 
-            connection.SendASDU(newAsdu);
+                    var val = (SinglePointWithCP56Time2a)asdu.GetElement(i);
 
-            // send sequence of information objects
-            newAsdu = new ASDU(cp, CauseOfTransmission.INTERROGATED_BY_STATION, false, false, 2, 1, true);
+                    Console.WriteLine("  IOA: " + val.ObjectAddress + " SP value: " + val.Value);
+                    Console.WriteLine("   " + val.Quality.ToString());
+                    Console.WriteLine("   " + val.Timestamp.ToString());
+                }
+            }
+            else if (asdu.TypeId == TypeID.M_ME_NC_1)
+            {
 
-            newAsdu.AddInformationObject(new SinglePointInformation(200, true, new QualityDescriptor()));
-            newAsdu.AddInformationObject(new SinglePointInformation(201, false, new QualityDescriptor()));
-            newAsdu.AddInformationObject(new SinglePointInformation(202, true, new QualityDescriptor()));
-            newAsdu.AddInformationObject(new SinglePointInformation(203, false, new QualityDescriptor()));
-            newAsdu.AddInformationObject(new SinglePointInformation(204, true, new QualityDescriptor()));
-            newAsdu.AddInformationObject(new SinglePointInformation(205, false, new QualityDescriptor()));
-            newAsdu.AddInformationObject(new SinglePointInformation(206, true, new QualityDescriptor()));
-            newAsdu.AddInformationObject(new SinglePointInformation(207, false, new QualityDescriptor()));
+                for (int i = 0; i < asdu.NumberOfElements; i++)
+                {
+                    var mfv = (MeasuredValueShort)asdu.GetElement(i);
 
-            connection.SendASDU(newAsdu);
+                    Console.WriteLine("  IOA: " + mfv.ObjectAddress + " float value: " + mfv.Value);
+                    Console.WriteLine("   " + mfv.Quality.ToString());
+                }
+            }
+            else if (asdu.TypeId == TypeID.M_ME_NB_1)
+            {
 
-            newAsdu = new ASDU(cp, CauseOfTransmission.INTERROGATED_BY_STATION, false, false, 2, 1, true);
+                for (int i = 0; i < asdu.NumberOfElements; i++)
+                {
 
-            newAsdu.AddInformationObject(new MeasuredValueNormalizedWithoutQuality(300, -1.0f));
-            newAsdu.AddInformationObject(new MeasuredValueNormalizedWithoutQuality(301, -0.5f));
-            newAsdu.AddInformationObject(new MeasuredValueNormalizedWithoutQuality(302, -0.1f));
-            newAsdu.AddInformationObject(new MeasuredValueNormalizedWithoutQuality(303, .0f));
-            newAsdu.AddInformationObject(new MeasuredValueNormalizedWithoutQuality(304, 0.1f));
-            newAsdu.AddInformationObject(new MeasuredValueNormalizedWithoutQuality(305, 0.2f));
-            newAsdu.AddInformationObject(new MeasuredValueNormalizedWithoutQuality(306, 0.5f));
-            newAsdu.AddInformationObject(new MeasuredValueNormalizedWithoutQuality(307, 0.7f));
-            newAsdu.AddInformationObject(new MeasuredValueNormalizedWithoutQuality(308, 0.99f));
-            newAsdu.AddInformationObject(new MeasuredValueNormalizedWithoutQuality(309, 1f));
+                    var msv = (MeasuredValueScaled)asdu.GetElement(i);
 
-            connection.SendASDU(newAsdu);
+                    Console.WriteLine("  IOA: " + msv.ObjectAddress + " scaled value: " + msv.ScaledValue);
+                    Console.WriteLine("   " + msv.Quality.ToString());
+                }
 
-            connection.SendACT_TERM(asdu);
+            }
+            else if (asdu.TypeId == TypeID.M_ME_ND_1)
+            {
+
+                for (int i = 0; i < asdu.NumberOfElements; i++)
+                {
+
+                    var msv = (MeasuredValueNormalizedWithoutQuality)asdu.GetElement(i);
+
+                    Console.WriteLine("  IOA: " + msv.ObjectAddress + " scaled value: " + msv.NormalizedValue);
+                }
+
+            }
+            else if (asdu.TypeId == TypeID.C_IC_NA_1)
+            {
+                if (asdu.Cot == CauseOfTransmission.ACTIVATION_CON)
+                    Console.WriteLine((asdu.IsNegative ? "Negative" : "Positive") + "confirmation for interrogation command");
+                else if (asdu.Cot == CauseOfTransmission.ACTIVATION_TERMINATION)
+                    Console.WriteLine("Interrogation command terminated");
+            }
+            else if (asdu.TypeId == TypeID.F_DR_TA_1)
+            {
+                Console.WriteLine("Received file directory:\n------------------------");
+                int ca = asdu.Ca;
+
+                for (int i = 0; i < asdu.NumberOfElements; i++)
+                {
+                    FileDirectory fd = (FileDirectory)asdu.GetElement(i);
+
+                    Console.Write(fd.FOR ? "DIR:  " : "FILE: ");
+
+                    Console.WriteLine("CA: {0} IOA: {1} Type: {2}", ca, fd.ObjectAddress, fd.NOF.ToString());
+                }
+
+            }
+            else
+            {
+                Console.WriteLine("Unknown message type!");
+            }
 
             return true;
         }
 
-        private static bool asduHandler(object parameter, IMasterConnection connection, ASDU asdu)
+        public class Receiver : IFileReceiver
         {
-
-            if (asdu.TypeId == TypeID.C_SC_NA_1)
+            public void Finished(FileErrorCode result)
             {
-                Console.WriteLine("Single command");
-
-                SingleCommand sc = (SingleCommand)asdu.GetElement(0);
-
-                Console.WriteLine(sc.ToString());
-            }
-            else if (asdu.TypeId == TypeID.C_CS_NA_1)
-            {
-
-
-                ClockSynchronizationCommand qsc = (ClockSynchronizationCommand)asdu.GetElement(0);
-
-                Console.WriteLine("Received clock sync command with time " + qsc.NewTime.ToString());
+                Console.WriteLine("File download finished - code: " + result.ToString());
             }
 
-            return true;
+
+            public void SegmentReceived(byte sectionName, int offset, int size, byte[] data)
+            {
+                Console.WriteLine("File segment - sectionName: {0} offset: {1} size: {2}", sectionName, offset, size);
+            }
         }
 
         public static void Maind()
         {
-            bool running = true;
+            Console.WriteLine("Using lib60870.NET version " + LibraryCommon.GetLibraryVersionString());
 
-            Console.CancelKeyPress += delegate (object sender, ConsoleCancelEventArgs e) {
-                e.Cancel = true;
-                running = false;
-            };
+            Connection con = new Connection("127.0.0.1");
 
-            Server server = new Server();
+            con.DebugOutput = true;
 
-            server.DebugOutput = true;
+            con.SetASDUReceivedHandler(asduReceivedHandler, null);
+            con.SetConnectionHandler(ConnectionHandler, null);
 
-            server.MaxQueueSize = 10;
+            con.Connect();
 
-            server.SetInterrogationHandler(interrogationHandler, null);
+            con.GetDirectory(1);
 
-            server.SetASDUHandler(asduHandler, null);
+            con.GetFile(1, 30000, NameOfFile.TRANSPARENT_FILE, new Receiver());
 
-            server.Start();
+            Thread.Sleep(50000);
 
-            ASDU newAsdu = new ASDU(server.GetApplicationLayerParameters(), CauseOfTransmission.INITIALIZED, false, false, 0, 1, false);
-            EndOfInitialization eoi = new EndOfInitialization(0);
-            newAsdu.AddInformationObject(eoi);
-            server.EnqueueASDU(newAsdu);
+            con.SendTestCommand(1);
 
-            int waitTime = 1000;
+            con.SendInterrogationCommand(CauseOfTransmission.ACTIVATION, 1, QualifierOfInterrogation.STATION);
 
-            while (running)
-            {
-                Thread.Sleep(100);
+            Thread.Sleep(5000);
 
-                if (waitTime > 0)
-                    waitTime -= 100;
-                else
-                {
+            con.SendControlCommand(CauseOfTransmission.ACTIVATION, 1, new SingleCommand(5000, true, false, 0));
 
-                    newAsdu = new ASDU(server.GetApplicationLayerParameters(), CauseOfTransmission.PERIODIC, false, false, 2, 1, false);
+            con.SendControlCommand(CauseOfTransmission.ACTIVATION, 1, new DoubleCommand(5001, DoubleCommand.ON, false, 0));
 
-                    newAsdu.AddInformationObject(new MeasuredValueScaled(110, -1, new QualityDescriptor()));
+            con.SendControlCommand(CauseOfTransmission.ACTIVATION, 1, new StepCommand(5002, StepCommandValue.HIGHER, false, 0));
 
-                    server.EnqueueASDU(newAsdu);
+            con.SendControlCommand(CauseOfTransmission.ACTIVATION, 1,
+                                    new SingleCommandWithCP56Time2a(5000, false, false, 0, new CP56Time2a(DateTime.Now)));
 
-                    waitTime = 1000;
-                }
-            }
+            /* Synchronize clock of the controlled station */
+            con.SendClockSyncCommand(1 /* CA */, new CP56Time2a(DateTime.Now));
 
-            Console.WriteLine("Stop server");
-            server.Stop();
+
+            Console.WriteLine("CLOSE");
+
+            con.Close();
+
+            Console.WriteLine("RECONNECT");
+
+            con.Connect();
+
+            Thread.Sleep(5000);
+
+
+            Console.WriteLine("CLOSE 2");
+
+            con.Close();
+
+            Console.WriteLine("Press any key to terminate...");
+            Console.ReadKey();
         }
     }
 }

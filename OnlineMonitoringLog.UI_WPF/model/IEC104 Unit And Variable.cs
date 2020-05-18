@@ -47,30 +47,13 @@ namespace OnlineMonitoringLog.UI_WPF.model
 
             Connection con = new Connection("127.0.0.1");
 
-            con.DebugOutput = true;
+            con.DebugOutput = false;
 
             con.SetASDUReceivedHandler(asduReceivedHandler, null);
             con.SetConnectionHandler(ConnectionHandler, null);
 
-            con.Connect();
-
+            con.Connect();            
             
-
-
-            Console.WriteLine("CLOSE");
-
-            con.Close();
-
-            Console.WriteLine("RECONNECT");
-
-            con.Connect();
-
-            Console.WriteLine("CLOSE 2");
-
-            con.Close();
-
-            Console.WriteLine("Press any key to terminate...");
-            Console.ReadKey();
         }
         private void Respond(object sender, ResponseEventArgs e)
         {
@@ -147,10 +130,24 @@ namespace OnlineMonitoringLog.UI_WPF.model
             }
         }
 
-        private static bool asduReceivedHandler(object parameter, ASDU asdu)
+        private  bool asduReceivedHandler(object parameter, ASDU asdu)
         {
             Console.WriteLine(asdu.ToString());
 
+            if (asdu.TypeId == TypeID.M_ST_TB_1)
+            {
+
+                for (int i = 0; i < asdu.NumberOfElements; i++)
+                {
+
+                    var val = (StepPositionInformation)asdu.GetElement(i);
+
+                    Console.WriteLine("  IOA: " + val.ObjectAddress + " SP value: " + val.Value);
+                    Console.WriteLine("   " + val.Quality.ToString());
+                    _iec104Variables[0].value = val.Value.ToString();
+                    _iec104Variables[0].timeStamp = DateTime.Now;
+                }
+            }
             if (asdu.TypeId == TypeID.M_SP_NA_1)
             {
 
