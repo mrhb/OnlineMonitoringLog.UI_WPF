@@ -100,7 +100,7 @@ namespace OnlineMonitoringLog.UI_WPF.model
                 Ip = IPAddress.Parse(value);
             }
         }
-        public override string ToString() { return Ip.ToString(); }
+        public override string ToString() { return "IEC104: "+ Ip.ToString(); }
         public event PropertyChangedEventHandler PropertyChanged;
         // This method is called by the Set accessor of each property.  
         // The CallerMemberName attribute that is applied to the optional propertyName  

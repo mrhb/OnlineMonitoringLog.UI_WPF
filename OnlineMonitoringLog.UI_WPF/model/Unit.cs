@@ -15,6 +15,8 @@ namespace OnlineMonitoringLog.UI_WPF.model
         public Unit() { }
         public int ID { get; set; }
 
+        public ProtocolType Type { get; set; }
+
         private IPAddress _Ip;
 
         [NotMapped]

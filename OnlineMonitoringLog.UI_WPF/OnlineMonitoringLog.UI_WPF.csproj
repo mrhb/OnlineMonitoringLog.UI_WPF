@@ -84,6 +84,10 @@
     <Compile Include="Migrations\202005170738591_addIpToUnits.designer.cs">
       <DependentUpon>202005170738591_addIpToUnits.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202005190605316_addProtocolType.cs" />
+    <Compile Include="Migrations\202005190605316_addProtocolType.designer.cs">
+      <DependentUpon>202005190605316_addProtocolType.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="model\IEC104 Unit And Variable.cs" />
     <Compile Include="model\IUnit.cs" />
@@ -92,6 +96,7 @@
     <Compile Include="model\ReadOnlyObservableUnitCollection.cs" />
     <Compile Include="model\Station.cs" />
     <Compile Include="model\Unit.cs" />
+    <Compile Include="model\UnitFactory.cs" />
     <Compile Include="model\viewModelBase.cs" />
     <Compile Include="ucUnit.xaml.cs">
       <DependentUpon>ucUnit.xaml</DependentUpon>
@@ -134,6 +139,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202005170738591_addIpToUnits.resx">
       <DependentUpon>202005170738591_addIpToUnits.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005190605316_addProtocolType.resx">
+      <DependentUpon>202005190605316_addProtocolType.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

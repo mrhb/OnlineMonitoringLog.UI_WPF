@@ -21,18 +21,17 @@ namespace OnlineMonitoringLog.UI_WPF
     {     
         public MainWindow()
         {
-            InitializeComponent();
-   
+            InitializeComponent();   
             using (var db = new LoggingContext())
             {
                 var UnitEntities = db.Units.ToList();
 
                 List<IUnit> iunits=new List<IUnit>();
                 foreach (var item in UnitEntities) {
-                    if (item.Ip.ToString() == "127.0.0.0")
-                         iunits.Add(new IEC104Unit(item.Ip));
-                    else
-                        iunits.Add(new coapUnit(item.Ip)); }
+                        iunits.Add(
+                               UnitFactory.getUnit(item.Type, item.Ip)
+                               );
+                }
 
                 StationViewModel Station = new StationViewModel();
                 Station.StationViewModelBy(new Station(iunits));
