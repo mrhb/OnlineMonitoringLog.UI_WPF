@@ -12,12 +12,14 @@ using System.Runtime.CompilerServices;
 using lib60870;
 using lib60870.CS101;
 using lib60870.CS104;
+using System.Threading;
 
 namespace OnlineMonitoringLog.UI_WPF.model
 {
 
     public class IEC104Unit : INotifyPropertyChanged, IUnit
     {
+        private Timer ConnectionTimer;
         private ObservableCollection<IVariable> _iec104Variables = new ObservableCollection<IVariable>();
         private string _LastUpdateTime;
         private IPAddress _Ip;
@@ -26,6 +28,32 @@ namespace OnlineMonitoringLog.UI_WPF.model
         {
             Ip = ip;
             Initialize();
+            ConnectionTimer = new Timer(ConnectToIec104Server, null, 0, 1000);
+           
+        }
+
+        private void ConnectToIec104Server(object state)
+    
+        {
+            Console.WriteLine("Connect to Iec104Server Using lib60870.NET version " + LibraryCommon.GetLibraryVersionString());
+            Connection con = new Connection(Ip.ToString());
+
+            con.DebugOutput = false;
+
+            con.SetASDUReceivedHandler(asduReceivedHandler, null);
+            con.SetConnectionHandler(ConnectionHandler, null);
+
+            try
+            {
+                con.Connect();
+                ConnectionTimer = null;
+            }
+            catch (Exception)
+            {
+
+                ConnectionTimer = new Timer(ConnectToIec104Server, null, 0, 1000);
+            }
+           
         }
         public void Initialize()
         {
@@ -48,18 +76,13 @@ namespace OnlineMonitoringLog.UI_WPF.model
 
             foreach (var res in resources){_iec104Variables.Add(res);}
    
-            Console.WriteLine("Using lib60870.NET version " + LibraryCommon.GetLibraryVersionString());
+           
+            ConnectToIec104Server(null);
 
-            Connection con = new Connection(Ip.ToString());
 
-            con.DebugOutput = false;
 
-            con.SetASDUReceivedHandler(asduReceivedHandler, null);
-            con.SetConnectionHandler(ConnectionHandler, null);
-
-            con.Connect();            
-            
         }
+    
     
 
         public string LastUpdateTime
@@ -112,16 +135,17 @@ namespace OnlineMonitoringLog.UI_WPF.model
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-
-        private static void ConnectionHandler(object parameter, ConnectionEvent connectionEvent)
+        private  void ConnectionHandler(object parameter, ConnectionEvent connectionEvent)
         {
             switch (connectionEvent)
             {
                 case ConnectionEvent.OPENED:
                     Console.WriteLine("Connected");
+                    ConnectionTimer = null;
                     break;
                 case ConnectionEvent.CLOSED:
                     Console.WriteLine("Connection closed");
+                    ConnectionTimer = new Timer(ConnectToIec104Server, null, 0, 1000);
                     break;
                 case ConnectionEvent.STARTDT_CON_RECEIVED:
                     Console.WriteLine("STARTDT CON received");
