@@ -30,22 +30,27 @@ namespace OnlineMonitoringLog.UI_WPF.model
         public void Initialize()
         {
 
-            var resources = new List<string>() { "ServerTime", "TimeOfDay", "helloworld" };
+            var resources = new List<iec104Variable>() {
+            new iec104Variable(ObjAddress.InputWaterTemp, "InputWaterTemp"),
+            new iec104Variable(ObjAddress.InputWaterTemp,"InputWaterTemp"),
+            new iec104Variable(ObjAddress.OutputWaterTemp, "OutputWaterTemp"),
+            new iec104Variable(ObjAddress.OilPress, "OilPress"),
+            new iec104Variable(ObjAddress.AdvanceSpark, "AdvanceSpark"),
+            new iec104Variable(ObjAddress.ValvePosition, "ValvePosition"),
+            new iec104Variable(ObjAddress.ValveFlow, "ValveFlow"),
+            new iec104Variable(ObjAddress.ExhaustTemp, "ExhaustTemp"),
+            new iec104Variable(ObjAddress.ElecPower, "ElecPower"),
+            new iec104Variable(ObjAddress.ElecEnergy, "ElecEnergy"),
+            new iec104Variable(ObjAddress.WorkTime, "WorkTime"),
+            new iec104Variable(ObjAddress.frequency, "frequency"),
+            new iec104Variable(ObjAddress.PowerFactor, "PowerFactor"),
+            };
 
-            for (int i = 0; i < 3; i++)
-            {
-                resources.Add("TimeOfDay" + i.ToString());
-            }
-            foreach (var res in resources)
-            {
-                var Client = new iec104Variable(_Ip, res);
-                Client.Respond += Respond;
-                _iec104Variables.Add(Client);
-            }
+            foreach (var res in resources){_iec104Variables.Add(res);}
    
             Console.WriteLine("Using lib60870.NET version " + LibraryCommon.GetLibraryVersionString());
 
-            Connection con = new Connection("127.0.0.1");
+            Connection con = new Connection(Ip.ToString());
 
             con.DebugOutput = false;
 
@@ -55,10 +60,7 @@ namespace OnlineMonitoringLog.UI_WPF.model
             con.Connect();            
             
         }
-        private void Respond(object sender, ResponseEventArgs e)
-        {
-            LastUpdateTime = DateTime.Now.ToString();
-        }
+    
 
         public string LastUpdateTime
         {
@@ -134,13 +136,13 @@ namespace OnlineMonitoringLog.UI_WPF.model
         {
             Console.WriteLine(asdu.ToString());
 
-            if (asdu.TypeId == TypeID.M_ST_TB_1)
+            if (asdu.TypeId == TypeID.M_ME_TF_1)
             {
 
                 for (int i = 0; i < asdu.NumberOfElements; i++)
                 {
 
-                    var val = (StepPositionInformation)asdu.GetElement(i);
+                    var val = (MeasuredValueShortWithCP56Time2a)asdu.GetElement(i);
 
                     Console.WriteLine("  IOA: " + val.ObjectAddress + " SP value: " + val.Value);
                     Console.WriteLine("   " + val.Quality.ToString());
@@ -282,22 +284,20 @@ namespace OnlineMonitoringLog.UI_WPF.model
 
       
     }
-    public class iec104Variable : CoapClient, IVariable
+    public class iec104Variable : IVariable
     {
         string _value = "Not assigned";
         DateTime _timeStamp = new DateTime();
         string _resource = "Not assigned";
-        public iec104Variable(IPAddress ip, string resourceName) : base()
+        public iec104Variable(int ObjectAddress, string resourceName) : base()
         {
             name = resourceName;
-            Uri = new Uri("coap://" + ip.ToString() + "/" + resourceName);
-            ObserveAsync();
-            this.Respond += RecievedRespond;
+          
         }
-        private void RecievedRespond(object sender, ResponseEventArgs e)
+        public void RecievedData(int val,DateTime dt)
         {
-            value = e.Response.ResponseText;
-            timeStamp = DateTime.Now;
+            value = val.ToString();
+            timeStamp =dt;
         }
         public string name
         {
@@ -327,11 +327,11 @@ namespace OnlineMonitoringLog.UI_WPF.model
         {
             get
             {
-                return TimeStamp;
+                return _timeStamp;
             }
             set
             {
-                TimeStamp = value;
+                _timeStamp = value;
                 NotifyPropertyChanged("timeStamp");
             }
         }
@@ -349,18 +349,7 @@ namespace OnlineMonitoringLog.UI_WPF.model
             }
         }
 
-        public DateTime TimeStamp
-        {
-            get
-            {
-                return _timeStamp;
-            }
-
-            set
-            {
-                _timeStamp = value;
-            }
-        }
+        
 
         public string Resource
         {
@@ -390,6 +379,21 @@ namespace OnlineMonitoringLog.UI_WPF.model
         }
   
       
+    }
+    public class ObjAddress
+    {
+        public const int InputWaterTemp = 1;
+        public const int OutputWaterTemp = 2;
+        public const int OilPress = 3;
+        public const int AdvanceSpark = 4;
+        public const int ValvePosition = 5;
+        public const int ValveFlow = 6;
+        public const int ExhaustTemp = 7;
+        public const int ElecPower = 8;
+        public const int ElecEnergy = 9;
+        public const int WorkTime = 10;
+        public const int frequency = 11;
+        public const int PowerFactor = 12;
     }
 }
 
