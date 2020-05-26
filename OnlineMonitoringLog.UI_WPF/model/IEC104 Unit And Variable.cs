@@ -13,6 +13,7 @@ using lib60870;
 using lib60870.CS101;
 using lib60870.CS104;
 using System.Threading;
+using System.Linq;
 
 namespace OnlineMonitoringLog.UI_WPF.model
 {
@@ -28,7 +29,7 @@ namespace OnlineMonitoringLog.UI_WPF.model
         {
             Ip = ip;
             Initialize();
-            ConnectionTimer = new Timer(ConnectToIec104Server, null, 0, 1000);
+            ConnectionTimer = new Timer(ConnectToIec104Server, null, 0, 5000);
            
         }
 
@@ -51,16 +52,14 @@ namespace OnlineMonitoringLog.UI_WPF.model
             catch (Exception)
             {
 
-                ConnectionTimer = new Timer(ConnectToIec104Server, null, 0, 1000);
+                ConnectionTimer = new Timer(ConnectToIec104Server, null, 0, 5000);
             }
            
         }
         public void Initialize()
         {
-
             var resources = new List<iec104Variable>() {
             new iec104Variable(ObjAddress.InputWaterTemp, "InputWaterTemp"),
-            new iec104Variable(ObjAddress.InputWaterTemp,"InputWaterTemp"),
             new iec104Variable(ObjAddress.OutputWaterTemp, "OutputWaterTemp"),
             new iec104Variable(ObjAddress.OilPress, "OilPress"),
             new iec104Variable(ObjAddress.AdvanceSpark, "AdvanceSpark"),
@@ -145,10 +144,11 @@ namespace OnlineMonitoringLog.UI_WPF.model
                     break;
                 case ConnectionEvent.CLOSED:
                     Console.WriteLine("Connection closed");
-                    ConnectionTimer = new Timer(ConnectToIec104Server, null, 0, 1000);
+                    ConnectionTimer = new Timer(ConnectToIec104Server, null, 0, 5000);
                     break;
                 case ConnectionEvent.STARTDT_CON_RECEIVED:
                     Console.WriteLine("STARTDT CON received");
+                   
                     break;
                 case ConnectionEvent.STOPDT_CON_RECEIVED:
                     Console.WriteLine("STOPDT CON received");
@@ -167,128 +167,16 @@ namespace OnlineMonitoringLog.UI_WPF.model
                 {
 
                     var val = (MeasuredValueShortWithCP56Time2a)asdu.GetElement(i);
-
-                    Console.WriteLine("  IOA: " + val.ObjectAddress + " SP value: " + val.Value);
-                    Console.WriteLine("   " + val.Quality.ToString());
-                    _iec104Variables[0].value = val.Value.ToString();
-                    _iec104Variables[0].timeStamp = DateTime.Now;
+                    var item = _iec104Variables.Where(p => ((iec104Variable)p).ObjectAddress == val.ObjectAddress).First();
+                    item.value = val.Value.ToString();
+                    item.timeStamp = DateTime.Now;
                 }
-            }
-            if (asdu.TypeId == TypeID.M_SP_NA_1)
-            {
-
-                for (int i = 0; i < asdu.NumberOfElements; i++)
-                {
-
-                    var val = (SinglePointInformation)asdu.GetElement(i);
-
-                    Console.WriteLine("  IOA: " + val.ObjectAddress + " SP value: " + val.Value);
-                    Console.WriteLine("   " + val.Quality.ToString());
-                }
-            }
-            else if (asdu.TypeId == TypeID.M_ME_TE_1)
-            {
-
-                for (int i = 0; i < asdu.NumberOfElements; i++)
-                {
-
-                    var msv = (MeasuredValueScaledWithCP56Time2a)asdu.GetElement(i);
-
-                    Console.WriteLine("  IOA: " + msv.ObjectAddress + " scaled value: " + msv.ScaledValue);
-                    Console.WriteLine("   " + msv.Quality.ToString());
-                    Console.WriteLine("   " + msv.Timestamp.ToString());
-                }
-
-            }
-            else if (asdu.TypeId == TypeID.M_ME_TF_1)
-            {
-
-                for (int i = 0; i < asdu.NumberOfElements; i++)
-                {
-                    var mfv = (MeasuredValueShortWithCP56Time2a)asdu.GetElement(i);
-
-                    Console.WriteLine("  IOA: " + mfv.ObjectAddress + " float value: " + mfv.Value);
-                    Console.WriteLine("   " + mfv.Quality.ToString());
-                    Console.WriteLine("   " + mfv.Timestamp.ToString());
-                    Console.WriteLine("   " + mfv.Timestamp.GetDateTime().ToString());
-                }
-            }
-            else if (asdu.TypeId == TypeID.M_SP_TB_1)
-            {
-
-                for (int i = 0; i < asdu.NumberOfElements; i++)
-                {
-
-                    var val = (SinglePointWithCP56Time2a)asdu.GetElement(i);
-
-                    Console.WriteLine("  IOA: " + val.ObjectAddress + " SP value: " + val.Value);
-                    Console.WriteLine("   " + val.Quality.ToString());
-                    Console.WriteLine("   " + val.Timestamp.ToString());
-                }
-            }
-            else if (asdu.TypeId == TypeID.M_ME_NC_1)
-            {
-
-                for (int i = 0; i < asdu.NumberOfElements; i++)
-                {
-                    var mfv = (MeasuredValueShort)asdu.GetElement(i);
-
-                    Console.WriteLine("  IOA: " + mfv.ObjectAddress + " float value: " + mfv.Value);
-                    Console.WriteLine("   " + mfv.Quality.ToString());
-                }
-            }
-            else if (asdu.TypeId == TypeID.M_ME_NB_1)
-            {
-
-                for (int i = 0; i < asdu.NumberOfElements; i++)
-                {
-
-                    var msv = (MeasuredValueScaled)asdu.GetElement(i);
-
-                    Console.WriteLine("  IOA: " + msv.ObjectAddress + " scaled value: " + msv.ScaledValue);
-                    Console.WriteLine("   " + msv.Quality.ToString());
-                }
-
-            }
-            else if (asdu.TypeId == TypeID.M_ME_ND_1)
-            {
-
-                for (int i = 0; i < asdu.NumberOfElements; i++)
-                {
-
-                    var msv = (MeasuredValueNormalizedWithoutQuality)asdu.GetElement(i);
-
-                    Console.WriteLine("  IOA: " + msv.ObjectAddress + " scaled value: " + msv.NormalizedValue);
-                }
-
-            }
-            else if (asdu.TypeId == TypeID.C_IC_NA_1)
-            {
-                if (asdu.Cot == CauseOfTransmission.ACTIVATION_CON)
-                    Console.WriteLine((asdu.IsNegative ? "Negative" : "Positive") + "confirmation for interrogation command");
-                else if (asdu.Cot == CauseOfTransmission.ACTIVATION_TERMINATION)
-                    Console.WriteLine("Interrogation command terminated");
-            }
-            else if (asdu.TypeId == TypeID.F_DR_TA_1)
-            {
-                Console.WriteLine("Received file directory:\n------------------------");
-                int ca = asdu.Ca;
-
-                for (int i = 0; i < asdu.NumberOfElements; i++)
-                {
-                    FileDirectory fd = (FileDirectory)asdu.GetElement(i);
-
-                    Console.Write(fd.FOR ? "DIR:  " : "FILE: ");
-
-                    Console.WriteLine("CA: {0} IOA: {1} Type: {2}", ca, fd.ObjectAddress, fd.NOF.ToString());
-                }
-
             }
             else
             {
                 Console.WriteLine("Unknown message type!");
             }
-
+            LastUpdateTime = DateTime.Now.ToString();
             return true;
         }
 
@@ -313,10 +201,11 @@ namespace OnlineMonitoringLog.UI_WPF.model
         string _value = "Not assigned";
         DateTime _timeStamp = new DateTime();
         string _resource = "Not assigned";
+        int _ObjectAddress;
         public iec104Variable(int ObjectAddress, string resourceName) : base()
         {
             name = resourceName;
-          
+            _ObjectAddress = ObjectAddress;
         }
         public void RecievedData(int val,DateTime dt)
         {
@@ -373,7 +262,7 @@ namespace OnlineMonitoringLog.UI_WPF.model
             }
         }
 
-        
+        public int ObjectAddress {get { return _ObjectAddress; }}
 
         public string Resource
         {

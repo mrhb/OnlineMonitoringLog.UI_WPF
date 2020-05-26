@@ -88,6 +88,10 @@
     <Compile Include="Migrations\202005190605316_addProtocolType.designer.cs">
       <DependentUpon>202005190605316_addProtocolType.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202005261029108_alarmableObjects.cs" />
+    <Compile Include="Migrations\202005261029108_alarmableObjects.designer.cs">
+      <DependentUpon>202005261029108_alarmableObjects.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="model\IEC104 Unit And Variable.cs" />
     <Compile Include="model\IUnit.cs" />
@@ -143,6 +147,9 @@
     <EmbeddedResource Include="Migrations\202005190605316_addProtocolType.resx">
       <DependentUpon>202005190605316_addProtocolType.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005261029108_alarmableObjects.resx">
+      <DependentUpon>202005261029108_alarmableObjects.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -163,6 +170,10 @@
     <ProjectReference Include="..\..\lib60870.NET-2.1.0\lib60870\lib60870.csproj">
       <Project>{f604286a-1afc-4355-8c2c-a998cfcee979}</Project>
       <Name>lib60870</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\OnlineMonitoringLog.Core\OnlineMonitoringLog.Core\OnlineMonitoringLog.Core.csproj">
+      <Project>{ac744c57-e4a7-40f5-a021-50afa6a1f2bf}</Project>
+      <Name>OnlineMonitoringLog.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
