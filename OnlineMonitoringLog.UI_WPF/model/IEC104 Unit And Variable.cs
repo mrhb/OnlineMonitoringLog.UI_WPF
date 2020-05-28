@@ -14,12 +14,16 @@ using lib60870.CS101;
 using lib60870.CS104;
 using System.Threading;
 using System.Linq;
+using AlarmBase.DomainModel.repository;
+using AlarmBase.DomainModel;
+using AlarmBase.DomainModel.generics;
 
 namespace OnlineMonitoringLog.UI_WPF.model
 {
 
     public class IEC104Unit : INotifyPropertyChanged, IUnit
     {
+       private ILoggRepository repo = new LoggRepositry(new LoggingContext());
         private Timer ConnectionTimer;
         private ObservableCollection<IVariable> _iec104Variables = new ObservableCollection<IVariable>();
         private string _LastUpdateTime;
@@ -58,19 +62,19 @@ namespace OnlineMonitoringLog.UI_WPF.model
         }
         public void Initialize()
         {
-            var resources = new List<iec104Variable>() {
-            new iec104Variable(ObjAddress.InputWaterTemp, "InputWaterTemp"),
-            new iec104Variable(ObjAddress.OutputWaterTemp, "OutputWaterTemp"),
-            new iec104Variable(ObjAddress.OilPress, "OilPress"),
-            new iec104Variable(ObjAddress.AdvanceSpark, "AdvanceSpark"),
-            new iec104Variable(ObjAddress.ValvePosition, "ValvePosition"),
-            new iec104Variable(ObjAddress.ValveFlow, "ValveFlow"),
-            new iec104Variable(ObjAddress.ExhaustTemp, "ExhaustTemp"),
-            new iec104Variable(ObjAddress.ElecPower, "ElecPower"),
-            new iec104Variable(ObjAddress.ElecEnergy, "ElecEnergy"),
-            new iec104Variable(ObjAddress.WorkTime, "WorkTime"),
-            new iec104Variable(ObjAddress.frequency, "frequency"),
-            new iec104Variable(ObjAddress.PowerFactor, "PowerFactor"),
+            var resources = new List<IVariable>() {
+            new iec104Variable(ObjAddress.InputWaterTemp, "InputWaterTemp",repo),
+            new iec104Variable(ObjAddress.OutputWaterTemp, "OutputWaterTemp",repo),
+            new iec104Variable(ObjAddress.OilPress, "OilPress",repo),
+            new iec104Variable(ObjAddress.AdvanceSpark, "AdvanceSpark",repo),
+            new iec104Variable(ObjAddress.ValvePosition, "ValvePosition",repo),
+            new iec104Variable(ObjAddress.ValveFlow, "ValveFlow",repo),
+            new iec104Variable(ObjAddress.ExhaustTemp, "ExhaustTemp",repo),
+            new iec104Variable(ObjAddress.ElecPower, "ElecPower",repo),
+            new iec104Variable(ObjAddress.ElecEnergy, "ElecEnergy",repo),
+            new iec104Variable(ObjAddress.WorkTime, "WorkTime",repo),
+            new iec104Variable(ObjAddress.frequency, "frequency",repo),
+            new iec104Variable(ObjAddress.PowerFactor, "PowerFactor",repo),
             };
 
             foreach (var res in resources){_iec104Variables.Add(res);}
@@ -196,13 +200,13 @@ namespace OnlineMonitoringLog.UI_WPF.model
 
       
     }
-    public class iec104Variable : IVariable
+    public class iec104Variable : LoggableObj<int>, IVariable
     {
         string _value = "Not assigned";
         DateTime _timeStamp = new DateTime();
         string _resource = "Not assigned";
         int _ObjectAddress;
-        public iec104Variable(int ObjectAddress, string resourceName) : base()
+        public iec104Variable(int ObjectAddress, string resourceName,ILoggRepository Repo) : base(1,Repo)
         {
             name = resourceName;
             _ObjectAddress = ObjectAddress;
@@ -290,8 +294,17 @@ namespace OnlineMonitoringLog.UI_WPF.model
         {
             return value;
         }
-  
-      
+
+        public override List<Occurence<int>> ObjOccurences()
+        {
+            return new List<Occurence<int>>() { new hi(1) { setpoint = 50 } };
+        }
+        class hi : IntThreshold
+        {
+            public hi(int _objId) : base(_objId)
+            {
+            }
+        }
     }
     public class ObjAddress
     {
