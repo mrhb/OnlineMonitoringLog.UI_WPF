@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 namespace OnlineMonitoringLog.UI_WPF.model
 {
  
-    public class Unit 
+    public class UnitEntity 
     {
 
-        public Unit() { }
+        public UnitEntity() { }
         public int ID { get; set; }
 
         public ProtocolType Type { get; set; }

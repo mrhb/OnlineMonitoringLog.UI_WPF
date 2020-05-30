@@ -28,13 +28,13 @@ namespace OnlineMonitoringLog.UI_WPF.model
         private ObservableCollection<IVariable> _iec104Variables = new ObservableCollection<IVariable>();
         private string _LastUpdateTime;
         private IPAddress _Ip;
-        public IEC104Unit() { }
+        
         public IEC104Unit(IPAddress ip)
         {
             Ip = ip;
             Initialize();
             ConnectionTimer = new Timer(ConnectToIec104Server, null, 0, 5000);
-
+             ConnectToIec104Server(null);
         }
 
         private void ConnectToIec104Server(object state)
@@ -62,28 +62,9 @@ namespace OnlineMonitoringLog.UI_WPF.model
         }
         public void Initialize()
         {
-            var resources = new List<IVariable>() {
-            new iec104Variable(ObjAddress.InputWaterTemp, "InputWaterTemp",repo),
-            new iec104Variable(ObjAddress.OutputWaterTemp, "OutputWaterTemp",repo),
-            new iec104Variable(ObjAddress.OilPress, "OilPress",repo),
-            new iec104Variable(ObjAddress.AdvanceSpark, "AdvanceSpark",repo),
-            new iec104Variable(ObjAddress.ValvePosition, "ValvePosition",repo),
-            new iec104Variable(ObjAddress.ValveFlow, "ValveFlow",repo),
-            new iec104Variable(ObjAddress.ExhaustTemp, "ExhaustTemp",repo),
-            new iec104Variable(ObjAddress.ElecPower, "ElecPower",repo),
-            new iec104Variable(ObjAddress.ElecEnergy, "ElecEnergy",repo),
-            new iec104Variable(ObjAddress.WorkTime, "WorkTime",repo),
-            new iec104Variable(ObjAddress.frequency, "frequency",repo),
-            new iec104Variable(ObjAddress.PowerFactor, "PowerFactor",repo),
-            };
-
+            var resources = UnitVariables();
             foreach (var res in resources) { _iec104Variables.Add(res); }
-
-
-            ConnectToIec104Server(null);
-
-
-
+           
         }
 
 
@@ -183,6 +164,26 @@ namespace OnlineMonitoringLog.UI_WPF.model
             return true;
         }
 
+        public List<IVariable> UnitVariables()
+        {
+            var resources = new List<IVariable>() {
+            new iec104Variable(ObjAddress.InputWaterTemp, "InputWaterTemp",repo),
+            new iec104Variable(ObjAddress.OutputWaterTemp, "OutputWaterTemp",repo),
+            new iec104Variable(ObjAddress.OilPress, "OilPress",repo),
+            new iec104Variable(ObjAddress.AdvanceSpark, "AdvanceSpark",repo),
+            new iec104Variable(ObjAddress.ValvePosition, "ValvePosition",repo),
+            new iec104Variable(ObjAddress.ValveFlow, "ValveFlow",repo),
+            new iec104Variable(ObjAddress.ExhaustTemp, "ExhaustTemp",repo),
+            new iec104Variable(ObjAddress.ElecPower, "ElecPower",repo),
+            new iec104Variable(ObjAddress.ElecEnergy, "ElecEnergy",repo),
+            new iec104Variable(ObjAddress.WorkTime, "WorkTime",repo),
+            new iec104Variable(ObjAddress.frequency, "frequency",repo),
+            new iec104Variable(ObjAddress.PowerFactor, "PowerFactor",repo),
+            };
+
+            return resources;
+        }
+
         public class Receiver : IFileReceiver
         {
             public void Finished(FileErrorCode result)
@@ -199,129 +200,6 @@ namespace OnlineMonitoringLog.UI_WPF.model
 
 
     }
-    public class iec104Variable : LoggableObj<int>, IVariable
-    {
-        string _value = "Not assigned";
-        DateTime _timeStamp = new DateTime();
-        string _resource = "Not assigned";
-        int _ObjectAddress;
-        public iec104Variable(int ObjectAddress, string resourceName, ILoggRepository Repo) : base(1, Repo)
-        {
-            name = resourceName;
-            _ObjectAddress = ObjectAddress;
-        }
-        public void RecievedData(int val, DateTime dt)
-        {
-            State = val;
-            value = val.ToString();
-            timeStamp = dt;
-        }
-        public string name
-        {
-            get
-            {
-                return Resource;
-            }
-            set
-            {
-                Resource = value;
-                NotifyPropertyChanged("value");
-            }
-        }
-        public string value
-        {
-            get
-            {
-                return Value;
-            }
-            set
-            {
-
-                Value = value;
-                NotifyPropertyChanged("value");
-            }
-        }
-        public DateTime timeStamp
-        {
-            get
-            {
-                return _timeStamp;
-            }
-            set
-            {
-                _timeStamp = value;
-                NotifyPropertyChanged("timeStamp");
-            }
-        }
-
-        public string Value
-        {
-            get
-            {
-                return _value;
-            }
-
-            set
-            {
-                _value = value;
-            }
-        }
-
-        public int ObjectAddress { get { return _ObjectAddress; } }
-
-        public string Resource
-        {
-            get
-            {
-                return _resource;
-            }
-
-            set
-            {
-                _resource = value;
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        // This method is called by the Set accessor of each property.  
-        // The CallerMemberName attribute that is applied to the optional propertyName  
-        // parameter causes the property name of the caller to be substituted as an argument.  
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public override string ToString()
-        {
-            return value;
-        }
-
-        public override List<Occurence<int>> ObjOccurences()
-        {
-            return new List<Occurence<int>>() { new hi(1) { setpoint = 50 } };
-        }
-
-    }
-    class hi : IntThreshold
-    {
-        public hi(int _objId) : base(_objId)
-        {
-        }
-    }
-    public class ObjAddress
-    {
-        public const int InputWaterTemp = 1;
-        public const int OutputWaterTemp = 2;
-        public const int OilPress = 3;
-        public const int AdvanceSpark = 4;
-        public const int ValvePosition = 5;
-        public const int ValveFlow = 6;
-        public const int ExhaustTemp = 7;
-        public const int ElecPower = 8;
-        public const int ElecEnergy = 9;
-        public const int WorkTime = 10;
-        public const int frequency = 11;
-        public const int PowerFactor = 12;
-    }
+   
 }
 
