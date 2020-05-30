@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AlarmBase.DomainModel.repository;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -12,7 +13,8 @@ namespace OnlineMonitoringLog.UI_WPF.model.Generics
 {
     public abstract class  Unit:IUnit, INotifyPropertyChanged
     {
-        private ObservableCollection<IVariable> _coapVariables = new ObservableCollection<IVariable>();
+        protected ILoggRepository repo = new LoggRepositry(new LoggingContext());
+        private ObservableCollection<IVariable> _Variables = new ObservableCollection<IVariable>();
         private string _LastUpdateTime;
         protected IPAddress _Ip;
         public Unit(IPAddress ip)
@@ -25,10 +27,33 @@ namespace OnlineMonitoringLog.UI_WPF.model.Generics
             var resources = UnitVariables();
 
             foreach (var res in resources)
+            {  
+                if (!_Variables.Contains(res))
+                {
+                    res.PropertyChanged += valuChange;
+                    _Variables.Add(res);
+                }
+                else
+                    throw new System.ArgumentException("this Occurence is duplicate");
+            }           
+
+            ResetConfig();
+        }
+
+        public void ResetConfig()
+        {
+            foreach (var vari in _Variables)
             {
-                res.PropertyChanged += valuChange;
-                _coapVariables.Add(res);
+              //  var OccConfig = repo.ReadConfigInfo(vari);
+                //   occ.Initialization(OccConfig, occCulture);
+              //  vari.SetConfig(OccConfig);
+                // var occCulture= _Repo.SetDefaultCultureInfo(OccConfig.OccConfigID, string.Join("|", occ.AvailableParams));
+
+                //var occCulture = repo.ReadCultureInfo(vari);
+
+              //  occ.Initialization(OccConfig, occCulture);
             }
+            repo.SaveConfigs();
         }
 
         private void valuChange(object sender, PropertyChangedEventArgs e)
@@ -48,10 +73,10 @@ namespace OnlineMonitoringLog.UI_WPF.model.Generics
 
         public ObservableCollection<IVariable> Variables
         {
-            get { return _coapVariables; }
+            get { return _Variables; }
             set
             {
-                _coapVariables = value;
+                _Variables = value;
                 NotifyPropertyChanged("Units");
             }
         }

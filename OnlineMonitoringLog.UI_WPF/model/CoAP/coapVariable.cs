@@ -12,117 +12,30 @@ using System.Runtime.CompilerServices;
 
 namespace OnlineMonitoringLog.UI_WPF.model
 {
-    public class coapVariable : CoapClient, IVariable
+
+        public class coapVariable : Variable
     {
-        string _value = "Not assigned";
-        DateTime _timeStamp = new DateTime();
-        string _resource = "Not assigned";
-        public coapVariable(IPAddress ip, string resourceName) : base()
+        CoapClient _CoapClient;
+       public coapVariable(IPAddress ip, string resourceName) : base(resourceName)
         {
+            _CoapClient = new CoapClient();
             name = resourceName;
-            Uri = new Uri("coap://" + ip.ToString() + "/" + resourceName);
-            ObserveAsync();
-            this.Respond += RecievedRespond;
+            _CoapClient.Uri = new Uri("coap://" + ip.ToString() + "/" + resourceName);
+            _CoapClient.ObserveAsync();
+            _CoapClient.Respond += RecievedRespond;
         }
         private void RecievedRespond(object sender, ResponseEventArgs e)
         {
             value = e.Response.ResponseText;
             timeStamp = DateTime.Now;
         }
-        public string name
-        {
-            get
-            {
-                return Resource;
-            }
-            set
-            {
-                Resource = value;
-                NotifyPropertyChanged("value");
-            }
-        }
-        public string value
-        {
-            get
-            {
-                return Value;
-            }
-            set
-            {
-                Value = value;
-                NotifyPropertyChanged("value");
-            }
-        }
-        public DateTime timeStamp
-        {
-            get
-            {
-                return TimeStamp;
-            }
-            set
-            {
-                TimeStamp = value;
-                NotifyPropertyChanged("timeStamp");
-            }
-        }
-
-        public string Value
-        {
-            get
-            {
-                return _value;
-            }
-
-            set
-            {
-                _value = value;
-            }
-        }
-
-        public DateTime TimeStamp
-        {
-            get
-            {
-                return _timeStamp;
-            }
-
-            set
-            {
-                _timeStamp = value;
-            }
-        }
-
-        public string Resource
-        {
-            get
-            {
-                return _resource;
-            }
-
-            set
-            {
-                _resource = value;
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        // This method is called by the Set accessor of each property.  
-        // The CallerMemberName attribute that is applied to the optional propertyName  
-        // parameter causes the property name of the caller to be substituted as an argument.  
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+   
 
         public override string ToString()
         {
             return value;
         }
 
-        public void RecievedData(int val, DateTime dt)
-        {
-            throw new NotImplementedException();
-        }
     }
 
 }

@@ -17,22 +17,19 @@ using System.Linq;
 using AlarmBase.DomainModel.repository;
 using AlarmBase.DomainModel;
 using AlarmBase.DomainModel.generics;
+using OnlineMonitoringLog.UI_WPF.model.Generics;
 
 namespace OnlineMonitoringLog.UI_WPF.model
 {
 
-    public class IEC104Unit : INotifyPropertyChanged, IUnit
+    public class IEC104Unit : Unit
     {
-        private ILoggRepository repo = new LoggRepositry(new LoggingContext());
+      
         private Timer ConnectionTimer;
         private ObservableCollection<IVariable> _iec104Variables = new ObservableCollection<IVariable>();
-        private string _LastUpdateTime;
-        private IPAddress _Ip;
         
-        public IEC104Unit(IPAddress ip)
-        {
-            Ip = ip;
-            Initialize();
+        public IEC104Unit(IPAddress ip):base(ip)
+        {          
             ConnectionTimer = new Timer(ConnectToIec104Server, null, 0, 5000);
              ConnectToIec104Server(null);
         }
@@ -60,64 +57,10 @@ namespace OnlineMonitoringLog.UI_WPF.model
             }
 
         }
-        public void Initialize()
-        {
-            var resources = UnitVariables();
-            foreach (var res in resources) { _iec104Variables.Add(res); }
-           
-        }
-
-
-
-        public string LastUpdateTime
-        {
-            get { return _LastUpdateTime; }
-            private set
-            {
-                _LastUpdateTime = value;
-                NotifyPropertyChanged("LastUpdateTime");
-            }
-        }
-        public ObservableCollection<IVariable> Variables
-        {
-            get { return _iec104Variables; }
-            set
-            {
-                _iec104Variables = value;
-                NotifyPropertyChanged("Units");
-            }
-        }
-        public int ID { get; set; }
-
-        public IPAddress Ip
-        {
-            get { return _Ip; }
-            private set
-            {
-                _Ip = value;
-                NotifyPropertyChanged("ip");
-            }
-        }
-        public string StringIp
-        {
-            get
-            {
-                return _Ip.ToString();
-            }
-            set
-            {
-                Ip = IPAddress.Parse(value);
-            }
-        }
+  
+        
         public override string ToString() { return "IEC104: " + Ip.ToString(); }
-        public event PropertyChangedEventHandler PropertyChanged;
-        // This method is called by the Set accessor of each property.  
-        // The CallerMemberName attribute that is applied to the optional propertyName  
-        // parameter causes the property name of the caller to be substituted as an argument.  
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+       
 
         private void ConnectionHandler(object parameter, ConnectionEvent connectionEvent)
         {
@@ -152,7 +95,7 @@ namespace OnlineMonitoringLog.UI_WPF.model
                 {
 
                     var val = (MeasuredValueShortWithCP56Time2a)asdu.GetElement(i);
-                    var item = _iec104Variables.Where(p => ((iec104Variable)p).ObjectAddress == val.ObjectAddress).First();
+                    var item = Variables.Where(p => ((iec104Variable)p).ObjectAddress == val.ObjectAddress).First();
                     item.RecievedData((int)val.Value, DateTime.Now);
                 }
             }
@@ -160,11 +103,10 @@ namespace OnlineMonitoringLog.UI_WPF.model
             {
                 Console.WriteLine("Unknown message type!");
             }
-            LastUpdateTime = DateTime.Now.ToString();
-            return true;
+           return true;
         }
 
-        public List<IVariable> UnitVariables()
+        public override List<IVariable> UnitVariables()
         {
             var resources = new List<IVariable>() {
             new iec104Variable(ObjAddress.InputWaterTemp, "InputWaterTemp",repo),
@@ -184,19 +126,7 @@ namespace OnlineMonitoringLog.UI_WPF.model
             return resources;
         }
 
-        public class Receiver : IFileReceiver
-        {
-            public void Finished(FileErrorCode result)
-            {
-                Console.WriteLine("File download finished - code: " + result.ToString());
-            }
-
-
-            public void SegmentReceived(byte sectionName, int offset, int size, byte[] data)
-            {
-                Console.WriteLine("File segment - sectionName: {0} offset: {1} size: {2}", sectionName, offset, size);
-            }
-        }
+       
 
 
     }

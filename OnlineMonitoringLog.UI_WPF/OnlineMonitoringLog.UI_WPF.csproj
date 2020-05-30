@@ -96,18 +96,28 @@
     <Compile Include="Migrations\202005300640306_changeUnitEntityName.designer.cs">
       <DependentUpon>202005300640306_changeUnitEntityName.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202005301334005_LogVariableTables.cs" />
+    <Compile Include="Migrations\202005301334005_LogVariableTables.designer.cs">
+      <DependentUpon>202005301334005_LogVariableTables.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="model\CoAP\Variable.cs" />
+    <Compile Include="model\RegisteredVaraiableConfig.cs" />
     <Compile Include="model\CoAP\coapUnit.cs" />
     <Compile Include="model\Generics\Unit.cs" />
     <Compile Include="model\IEC104\iec104Variable.cs" />
     <Compile Include="model\IEC104\IEC104Unit.cs" />
     <Compile Include="model\Generics\IUnit.cs" />
     <Compile Include="model\Generics\IVariable.cs" />
+    <Compile Include="model\ILoggRepository.cs" />
+    <Compile Include="model\LoggableObj.cs" />
+    <Compile Include="model\LoggRepositry.cs" />
     <Compile Include="model\MonitoringDbContext.cs" />
     <Compile Include="model\ReadOnlyObservableUnitCollection.cs" />
     <Compile Include="model\Station.cs" />
     <Compile Include="model\UnitEntity.cs" />
     <Compile Include="model\UnitFactory.cs" />
+    <Compile Include="model\VariableLog.cs" />
     <Compile Include="model\viewModelBase.cs" />
     <Compile Include="ucUnit.xaml.cs">
       <DependentUpon>ucUnit.xaml</DependentUpon>
@@ -159,6 +169,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202005300640306_changeUnitEntityName.resx">
       <DependentUpon>202005300640306_changeUnitEntityName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005301334005_LogVariableTables.resx">
+      <DependentUpon>202005301334005_LogVariableTables.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

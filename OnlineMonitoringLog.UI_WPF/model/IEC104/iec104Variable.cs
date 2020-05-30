@@ -21,106 +21,23 @@ using AlarmBase.DomainModel.generics;
 namespace OnlineMonitoringLog.UI_WPF.model
 {
 
-    public class iec104Variable : LoggableObj<int>, IVariable
+    public class iec104Variable :Variable
     {
-        string _value = "Not assigned";
-        DateTime _timeStamp = new DateTime();
-        string _resource = "Not assigned";
+
         int _ObjectAddress;
-        public iec104Variable(int ObjectAddress, string resourceName, ILoggRepository Repo) : base(1, Repo)
+        public iec104Variable(int ObjectAddress, string resourceName, ILoggRepository Repo) : base(resourceName)
         {
+            _loggableObj = new LoggableObj(1, Repo);
             name = resourceName;
             _ObjectAddress = ObjectAddress;
         }
-        public void RecievedData(int val, DateTime dt)
-        {
-            State = val;
-            value = val.ToString();
-            timeStamp = dt;
-        }
-        public string name
-        {
-            get
-            {
-                return Resource;
-            }
-            set
-            {
-                Resource = value;
-                NotifyPropertyChanged("value");
-            }
-        }
-        public string value
-        {
-            get
-            {
-                return Value;
-            }
-            set
-            {
 
-                Value = value;
-                NotifyPropertyChanged("value");
-            }
-        }
-        public DateTime timeStamp
-        {
-            get
-            {
-                return _timeStamp;
-            }
-            set
-            {
-                _timeStamp = value;
-                NotifyPropertyChanged("timeStamp");
-            }
-        }
-
-        public string Value
-        {
-            get
-            {
-                return _value;
-            }
-
-            set
-            {
-                _value = value;
-            }
-        }
 
         public int ObjectAddress { get { return _ObjectAddress; } }
-
-        public string Resource
-        {
-            get
-            {
-                return _resource;
-            }
-
-            set
-            {
-                _resource = value;
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        // This method is called by the Set accessor of each property.  
-        // The CallerMemberName attribute that is applied to the optional propertyName  
-        // parameter causes the property name of the caller to be substituted as an argument.  
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
+        
         public override string ToString()
         {
             return value;
-        }
-
-        public override List<Occurence<int>> ObjOccurences()
-        {
-            return new List<Occurence<int>>() { new hi(1) { setpoint = 50 } };
         }
 
     }
