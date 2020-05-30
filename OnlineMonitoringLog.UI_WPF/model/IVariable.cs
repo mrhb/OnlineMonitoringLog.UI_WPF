@@ -8,6 +8,7 @@ namespace OnlineMonitoringLog.UI_WPF.model
         string name { get; set; }
         string value { get; set; }
         DateTime timeStamp { get; set; }
+        void RecievedData(int val, DateTime dt);
         string ToString();
 
     }

@@ -23,7 +23,7 @@ namespace OnlineMonitoringLog.UI_WPF.model
 
     public class IEC104Unit : INotifyPropertyChanged, IUnit
     {
-       private ILoggRepository repo = new LoggRepositry(new LoggingContext());
+        private ILoggRepository repo = new LoggRepositry(new LoggingContext());
         private Timer ConnectionTimer;
         private ObservableCollection<IVariable> _iec104Variables = new ObservableCollection<IVariable>();
         private string _LastUpdateTime;
@@ -34,11 +34,11 @@ namespace OnlineMonitoringLog.UI_WPF.model
             Ip = ip;
             Initialize();
             ConnectionTimer = new Timer(ConnectToIec104Server, null, 0, 5000);
-           
+
         }
 
         private void ConnectToIec104Server(object state)
-    
+
         {
             Console.WriteLine("Connect to Iec104Server Using lib60870.NET version " + LibraryCommon.GetLibraryVersionString());
             Connection con = new Connection(Ip.ToString());
@@ -58,7 +58,7 @@ namespace OnlineMonitoringLog.UI_WPF.model
 
                 ConnectionTimer = new Timer(ConnectToIec104Server, null, 0, 5000);
             }
-           
+
         }
         public void Initialize()
         {
@@ -77,16 +77,16 @@ namespace OnlineMonitoringLog.UI_WPF.model
             new iec104Variable(ObjAddress.PowerFactor, "PowerFactor",repo),
             };
 
-            foreach (var res in resources){_iec104Variables.Add(res);}
-   
-           
+            foreach (var res in resources) { _iec104Variables.Add(res); }
+
+
             ConnectToIec104Server(null);
 
 
 
         }
-    
-    
+
+
 
         public string LastUpdateTime
         {
@@ -128,7 +128,7 @@ namespace OnlineMonitoringLog.UI_WPF.model
                 Ip = IPAddress.Parse(value);
             }
         }
-        public override string ToString() { return "IEC104: "+ Ip.ToString(); }
+        public override string ToString() { return "IEC104: " + Ip.ToString(); }
         public event PropertyChangedEventHandler PropertyChanged;
         // This method is called by the Set accessor of each property.  
         // The CallerMemberName attribute that is applied to the optional propertyName  
@@ -138,7 +138,7 @@ namespace OnlineMonitoringLog.UI_WPF.model
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private  void ConnectionHandler(object parameter, ConnectionEvent connectionEvent)
+        private void ConnectionHandler(object parameter, ConnectionEvent connectionEvent)
         {
             switch (connectionEvent)
             {
@@ -152,7 +152,7 @@ namespace OnlineMonitoringLog.UI_WPF.model
                     break;
                 case ConnectionEvent.STARTDT_CON_RECEIVED:
                     Console.WriteLine("STARTDT CON received");
-                   
+
                     break;
                 case ConnectionEvent.STOPDT_CON_RECEIVED:
                     Console.WriteLine("STOPDT CON received");
@@ -160,7 +160,7 @@ namespace OnlineMonitoringLog.UI_WPF.model
             }
         }
 
-        private  bool asduReceivedHandler(object parameter, ASDU asdu)
+        private bool asduReceivedHandler(object parameter, ASDU asdu)
         {
             Console.WriteLine(asdu.ToString());
 
@@ -172,8 +172,7 @@ namespace OnlineMonitoringLog.UI_WPF.model
 
                     var val = (MeasuredValueShortWithCP56Time2a)asdu.GetElement(i);
                     var item = _iec104Variables.Where(p => ((iec104Variable)p).ObjectAddress == val.ObjectAddress).First();
-                    item.value = val.Value.ToString();
-                    item.timeStamp = DateTime.Now;
+                    item.RecievedData((int)val.Value, DateTime.Now);
                 }
             }
             else
@@ -198,7 +197,7 @@ namespace OnlineMonitoringLog.UI_WPF.model
             }
         }
 
-      
+
     }
     public class iec104Variable : LoggableObj<int>, IVariable
     {
@@ -206,15 +205,16 @@ namespace OnlineMonitoringLog.UI_WPF.model
         DateTime _timeStamp = new DateTime();
         string _resource = "Not assigned";
         int _ObjectAddress;
-        public iec104Variable(int ObjectAddress, string resourceName,ILoggRepository Repo) : base(1,Repo)
+        public iec104Variable(int ObjectAddress, string resourceName, ILoggRepository Repo) : base(1, Repo)
         {
             name = resourceName;
             _ObjectAddress = ObjectAddress;
         }
-        public void RecievedData(int val,DateTime dt)
+        public void RecievedData(int val, DateTime dt)
         {
+            State = val;
             value = val.ToString();
-            timeStamp =dt;
+            timeStamp = dt;
         }
         public string name
         {
@@ -236,6 +236,7 @@ namespace OnlineMonitoringLog.UI_WPF.model
             }
             set
             {
+
                 Value = value;
                 NotifyPropertyChanged("value");
             }
@@ -266,7 +267,7 @@ namespace OnlineMonitoringLog.UI_WPF.model
             }
         }
 
-        public int ObjectAddress {get { return _ObjectAddress; }}
+        public int ObjectAddress { get { return _ObjectAddress; } }
 
         public string Resource
         {
@@ -299,11 +300,12 @@ namespace OnlineMonitoringLog.UI_WPF.model
         {
             return new List<Occurence<int>>() { new hi(1) { setpoint = 50 } };
         }
-        class hi : IntThreshold
+
+    }
+    class hi : IntThreshold
+    {
+        public hi(int _objId) : base(_objId)
         {
-            public hi(int _objId) : base(_objId)
-            {
-            }
         }
     }
     public class ObjAddress

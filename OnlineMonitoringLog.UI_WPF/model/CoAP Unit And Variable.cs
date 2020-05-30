@@ -15,31 +15,31 @@ namespace OnlineMonitoringLog.UI_WPF.model
 
     public class coapUnit : INotifyPropertyChanged, IUnit
     {
-        private ObservableCollection<IVariable> _coapVariables= new ObservableCollection<IVariable>();
+        private ObservableCollection<IVariable> _coapVariables = new ObservableCollection<IVariable>();
         private string _LastUpdateTime;
         private IPAddress _Ip;
         public coapUnit() { }
         public coapUnit(IPAddress ip)
         {
             Ip = ip;
-            Initialize();         
+            Initialize();
         }
-   public void Initialize()
-    {
-
-        var resources = new List<string>() { "ServerTime", "TimeOfDay", "helloworld" };
-
-
-        foreach (var res in resources)
+        public void Initialize()
         {
-            var Client = new coapVariable(_Ip, res);
-            Client.Respond += Respond;
-            _coapVariables.Add(Client);
+
+            var resources = new List<string>() { "ServerTime", "TimeOfDay", "helloworld" };
+
+
+            foreach (var res in resources)
+            {
+                var Client = new coapVariable(_Ip, res);
+                Client.Respond += Respond;
+                _coapVariables.Add(Client);
+            }
         }
-    }
         private void Respond(object sender, ResponseEventArgs e)
         {
-            LastUpdateTime =DateTime.Now.ToString();
+            LastUpdateTime = DateTime.Now.ToString();
         }
 
         public string LastUpdateTime
@@ -72,7 +72,8 @@ namespace OnlineMonitoringLog.UI_WPF.model
                 NotifyPropertyChanged("ip");
             }
         }
-        public string StringIp {
+        public string StringIp
+        {
             get
             {
                 return _Ip.ToString();
@@ -82,7 +83,7 @@ namespace OnlineMonitoringLog.UI_WPF.model
                 Ip = IPAddress.Parse(value);
             }
         }
-        public override string ToString() { return "CoAP: "+ Ip.ToString(); }
+        public override string ToString() { return "CoAP: " + Ip.ToString(); }
         public event PropertyChangedEventHandler PropertyChanged;
         // This method is called by the Set accessor of each property.  
         // The CallerMemberName attribute that is applied to the optional propertyName  
@@ -95,10 +96,11 @@ namespace OnlineMonitoringLog.UI_WPF.model
 
     public class coapVariable : CoapClient, IVariable
     {
-        string _value= "Not assigned";
-        DateTime _timeStamp =new DateTime();
+        string _value = "Not assigned";
+        DateTime _timeStamp = new DateTime();
         string _resource = "Not assigned";
-        public coapVariable(IPAddress ip,string resourceName) : base() {
+        public coapVariable(IPAddress ip, string resourceName) : base()
+        {
             name = resourceName;
             Uri = new Uri("coap://" + ip.ToString() + "/" + resourceName);
             ObserveAsync();
@@ -106,7 +108,7 @@ namespace OnlineMonitoringLog.UI_WPF.model
         }
         private void RecievedRespond(object sender, ResponseEventArgs e)
         {
-            value  = e.Response.ResponseText;
+            value = e.Response.ResponseText;
             timeStamp = DateTime.Now;
         }
         public string name
@@ -198,8 +200,12 @@ namespace OnlineMonitoringLog.UI_WPF.model
         {
             return value;
         }
+
+        public void RecievedData(int val, DateTime dt)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }
-  
- 
+
