@@ -16,24 +16,19 @@ namespace OnlineMonitoringLog.UI_WPF.model
     public abstract class Variable :  IVariable
     {
         protected LoggableObj _loggableObj;
-        RegisteredVarConfig _RegisteredVaraiableConfig;
+        protected ILoggRepository _repo;
+        RegisteredVarConfig _varConfig;
         int _unitId;
         string _value = "Not assigned";
         DateTime _timeStamp = new DateTime();
         string _resource = "Not assigned";
-        public Variable(string resourceName) : base()
+        public Variable(int unitId,string resourceName, ILoggRepository repo) 
         {
             name = resourceName;
-           
+             _unitId= unitId;
+            _repo = repo;
         }
-        public Variable(int unitId) : base()
-        {
-            _unitId= unitId;
-
-        }
-
-
-        public void RecievedData(int val, DateTime dt)
+       public void RecievedData(int val, DateTime dt)
         {
             _loggableObj.State = val;
             value = val.ToString();
@@ -127,6 +122,7 @@ namespace OnlineMonitoringLog.UI_WPF.model
             {
                 return _unitId;
             }
+            protected set { _unitId = value; }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -142,10 +138,43 @@ namespace OnlineMonitoringLog.UI_WPF.model
         {
             return value;
         }
-
-         public void SetConfig(object occConfig)
+        private void ChangedConfigEvent(object sender, PropertyChangedEventArgs e)
         {
-            throw new NotImplementedException();
+            SetConfig((RegisteredVarConfig)sender);
+        }
+        public bool SetConfig(RegisteredVarConfig _OccConfig)
+        {
+            _varConfig = _OccConfig;
+            _varConfig.ConfigChangeSaved += ChangedConfigEvent;
+            Boolean result = true;
+            try
+            {
+        //        Type t = Type.GetType(_OccConfig.SetPointType);
+        //var sfsdf = Activator.CreateInstance(t);
+
+        //        if (t == typeof(int))
+        //        {
+        //            setpointObj = Convert.ToInt32(_OccConfig.SerializedSetPoint);
+        //        }
+        //        else if (t == typeof(bool))
+        //        {
+        //            setpointObj = Convert.ToBoolean(_OccConfig.SerializedSetPoint);
+        //        }
+
+        //        else
+        //            result = false;
+            }
+            catch (Exception c)
+            {
+                result = false;
+            }
+            return result;
+            }
+
+        public Boolean Initialization(RegisteredVarConfig varConfig)
+        {
+            _loggableObj = new LoggableObj(varConfig.VarConfigID, _repo);
+            return SetConfig(varConfig);
         }
     }
 

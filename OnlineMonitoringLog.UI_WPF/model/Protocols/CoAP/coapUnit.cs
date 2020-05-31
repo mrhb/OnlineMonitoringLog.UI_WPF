@@ -16,7 +16,7 @@ namespace OnlineMonitoringLog.UI_WPF.model
 
     public class coapUnit : Unit
     {
-        public coapUnit(IPAddress ip) : base(ip) { }       
+        public coapUnit(int unitId, IPAddress ip) : base(unitId,ip) { }       
         
         public override string ToString() { return "CoAP: " + Ip.ToString(); }
 
@@ -28,7 +28,7 @@ namespace OnlineMonitoringLog.UI_WPF.model
 
             foreach (var res in names)
             {
-                var Client = new coapVariable(_Ip, res);
+                var Client = new coapVariable(ID,_Ip, res, repo);
                 resources.Add(Client);
             }
             return resources;

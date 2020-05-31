@@ -21,7 +21,7 @@ public  class LoggableObj : AlarmableObj<int>
         }
         public override List<Occurence<int>> ObjOccurences()
         {
-            return new List<Occurence<int>>() { new hi(1) { setpoint = 50 } };
+            return new List<Occurence<int>>() { new hi(ObjId) { setpoint = 50 } };
         }
     }
 }

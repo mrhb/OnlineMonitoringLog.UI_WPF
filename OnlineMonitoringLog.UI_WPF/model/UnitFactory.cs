@@ -9,14 +9,14 @@ namespace OnlineMonitoringLog.UI_WPF.model
 {
     public class UnitFactory
     {
-        public static IUnit getUnit(ProtocolType pt, IPAddress ip)
+        public static IUnit getUnit(int UnitId, ProtocolType pt, IPAddress ip)
         {
             switch (pt)
             {
                 case ProtocolType.CoAp:
-                  return new coapUnit(ip);
+                  return new coapUnit(UnitId,ip);
                 case ProtocolType.IEC104:
-                    return new IEC104Unit(ip);
+                    return new IEC104Unit(UnitId,ip);
                 default:
                   throw new ApplicationException(string.Format("Unit of Type '{0}' not implemented to be created", pt.ToString()));
                   

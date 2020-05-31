@@ -20,14 +20,12 @@ using AlarmBase.DomainModel.generics;
 
 namespace OnlineMonitoringLog.UI_WPF.model
 {
-
     public class iec104Variable :Variable
     {
 
         int _ObjectAddress;
-        public iec104Variable(int ObjectAddress, string resourceName, ILoggRepository Repo) : base(resourceName)
+        public iec104Variable(int unitId, int ObjectAddress, string resourceName, ILoggRepository Repo) : base(unitId,resourceName,Repo)
         {
-            _loggableObj = new LoggableObj(1, Repo);
             name = resourceName;
             _ObjectAddress = ObjectAddress;
         }

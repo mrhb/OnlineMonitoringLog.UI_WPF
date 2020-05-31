@@ -13,13 +13,14 @@ namespace OnlineMonitoringLog.UI_WPF.model.Generics
 {
     public abstract class  Unit:IUnit, INotifyPropertyChanged
     {
-        protected ILoggRepository repo = new LoggRepositry(new LoggingContext());
+        static protected ILoggRepository repo = new LoggRepositry(new LoggingContext());
         private ObservableCollection<IVariable> _Variables = new ObservableCollection<IVariable>();
         private string _LastUpdateTime;
         protected IPAddress _Ip;
-        public Unit(IPAddress ip)
+        public Unit(int unitId,IPAddress ip)
         {
             Ip = ip;
+            ID = unitId;
             Initialize();
         }
         public void Initialize()
@@ -31,6 +32,7 @@ namespace OnlineMonitoringLog.UI_WPF.model.Generics
                 if (!_Variables.Contains(res))
                 {
                     res.PropertyChanged += valuChange;
+                 
                     _Variables.Add(res);
                 }
                 else
@@ -44,14 +46,11 @@ namespace OnlineMonitoringLog.UI_WPF.model.Generics
         {
             foreach (var vari in _Variables)
             {
-              //  var OccConfig = repo.ReadConfigInfo(vari);
-                //   occ.Initialization(OccConfig, occCulture);
-              //  vari.SetConfig(OccConfig);
-                // var occCulture= _Repo.SetDefaultCultureInfo(OccConfig.OccConfigID, string.Join("|", occ.AvailableParams));
+                var OccConfig = repo.ReadVarConfigInfo(vari);
+                             
+                vari.SetConfig(OccConfig);
 
-                //var occCulture = repo.ReadCultureInfo(vari);
-
-              //  occ.Initialization(OccConfig, occCulture);
+                vari.Initialization(OccConfig);
             }
             repo.SaveConfigs();
         }

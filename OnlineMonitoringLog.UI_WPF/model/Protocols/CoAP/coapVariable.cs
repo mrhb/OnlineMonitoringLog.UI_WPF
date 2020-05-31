@@ -16,7 +16,7 @@ namespace OnlineMonitoringLog.UI_WPF.model
         public class coapVariable : Variable
     {
         CoapClient _CoapClient;
-       public coapVariable(IPAddress ip, string resourceName) : base(resourceName)
+       public coapVariable(int unitId, IPAddress ip, string resourceName, ILoggRepository repo) : base(unitId, resourceName,repo)
         {
             _CoapClient = new CoapClient();
             name = resourceName;

@@ -28,7 +28,7 @@ namespace OnlineMonitoringLog.UI_WPF.model
         private Timer ConnectionTimer;
         private ObservableCollection<IVariable> _iec104Variables = new ObservableCollection<IVariable>();
         
-        public IEC104Unit(IPAddress ip):base(ip)
+        public IEC104Unit(int unitId, IPAddress ip):base(unitId,ip)
         {          
             ConnectionTimer = new Timer(ConnectToIec104Server, null, 0, 5000);
              ConnectToIec104Server(null);
@@ -109,18 +109,18 @@ namespace OnlineMonitoringLog.UI_WPF.model
         public override List<IVariable> UnitVariables()
         {
             var resources = new List<IVariable>() {
-            new iec104Variable(ObjAddress.InputWaterTemp, "InputWaterTemp",repo),
-            new iec104Variable(ObjAddress.OutputWaterTemp, "OutputWaterTemp",repo),
-            new iec104Variable(ObjAddress.OilPress, "OilPress",repo),
-            new iec104Variable(ObjAddress.AdvanceSpark, "AdvanceSpark",repo),
-            new iec104Variable(ObjAddress.ValvePosition, "ValvePosition",repo),
-            new iec104Variable(ObjAddress.ValveFlow, "ValveFlow",repo),
-            new iec104Variable(ObjAddress.ExhaustTemp, "ExhaustTemp",repo),
-            new iec104Variable(ObjAddress.ElecPower, "ElecPower",repo),
-            new iec104Variable(ObjAddress.ElecEnergy, "ElecEnergy",repo),
-            new iec104Variable(ObjAddress.WorkTime, "WorkTime",repo),
-            new iec104Variable(ObjAddress.frequency, "frequency",repo),
-            new iec104Variable(ObjAddress.PowerFactor, "PowerFactor",repo),
+               new iec104Variable(ID,ObjAddress.InputWaterTemp, "InputWaterTemp",repo),
+               new iec104Variable(ID,ObjAddress.OutputWaterTemp, "OutputWaterTemp",repo),
+               new iec104Variable(ID,ObjAddress.OilPress, "OilPress",repo),
+               //new iec104Variable(ID,ObjAddress.AdvanceSpark, "AdvanceSpark",repo),
+               //new iec104Variable(ID,ObjAddress.ValvePosition, "ValvePosition",repo),
+               //new iec104Variable(ID,ObjAddress.ValveFlow, "ValveFlow",repo),
+               //new iec104Variable(ID,ObjAddress.ExhaustTemp, "ExhaustTemp",repo),
+               //new iec104Variable(ID,ObjAddress.ElecPower, "ElecPower",repo),
+               //new iec104Variable(ID,ObjAddress.ElecEnergy, "ElecEnergy",repo),
+               //new iec104Variable(ID,ObjAddress.WorkTime, "WorkTime",repo),
+               //new iec104Variable(ID,ObjAddress.frequency, "frequency",repo),
+               //new iec104Variable(ID,ObjAddress.PowerFactor, "PowerFactor",repo),
             };
 
             return resources;

@@ -29,7 +29,7 @@ namespace OnlineMonitoringLog.UI_WPF
                 List<IUnit> iunits=new List<IUnit>();
                 foreach (var item in UnitEntities) {
                         iunits.Add(
-                               UnitFactory.getUnit(item.Type, item.Ip)
+                               UnitFactory.getUnit(item.ID, item.Type, item.Ip)
                                );
                 }
 

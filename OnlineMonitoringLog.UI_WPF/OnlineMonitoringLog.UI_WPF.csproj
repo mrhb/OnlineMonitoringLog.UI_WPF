@@ -101,28 +101,28 @@
       <DependentUpon>202005301334005_LogVariableTables.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="model\CoAP\Variable.cs" />
-    <Compile Include="model\RegisteredVaraiableConfig.cs" />
-    <Compile Include="model\CoAP\coapUnit.cs" />
-    <Compile Include="model\Generics\Unit.cs" />
-    <Compile Include="model\IEC104\iec104Variable.cs" />
-    <Compile Include="model\IEC104\IEC104Unit.cs" />
-    <Compile Include="model\Generics\IUnit.cs" />
-    <Compile Include="model\Generics\IVariable.cs" />
-    <Compile Include="model\ILoggRepository.cs" />
-    <Compile Include="model\LoggableObj.cs" />
-    <Compile Include="model\LoggRepositry.cs" />
-    <Compile Include="model\MonitoringDbContext.cs" />
-    <Compile Include="model\ReadOnlyObservableUnitCollection.cs" />
-    <Compile Include="model\Station.cs" />
-    <Compile Include="model\UnitEntity.cs" />
-    <Compile Include="model\UnitFactory.cs" />
-    <Compile Include="model\VariableLog.cs" />
-    <Compile Include="model\viewModelBase.cs" />
+    <Compile Include="Model\Generics\Variable.cs" />
+    <Compile Include="Model\Entities\RegisteredVaraiableConfig.cs" />
+    <Compile Include="Model\Protocols\CoAP\coapUnit.cs" />
+    <Compile Include="Model\Generics\Unit.cs" />
+    <Compile Include="Model\Protocols\IEC104\iec104Variable.cs" />
+    <Compile Include="Model\Protocols\IEC104\IEC104Unit.cs" />
+    <Compile Include="Model\Generics\IUnit.cs" />
+    <Compile Include="Model\Generics\IVariable.cs" />
+    <Compile Include="Model\ILoggRepository.cs" />
+    <Compile Include="Model\LoggableObj.cs" />
+    <Compile Include="Model\LoggRepositry.cs" />
+    <Compile Include="Model\Entities\MonitoringDbContext.cs" />
+    <Compile Include="ViewModel\ReadOnlyObservableUnitCollection.cs" />
+    <Compile Include="Model\Station.cs" />
+    <Compile Include="Model\Entities\UnitEntity.cs" />
+    <Compile Include="Model\UnitFactory.cs" />
+    <Compile Include="Model\Entities\VariableLog.cs" />
+    <Compile Include="ViewModel\viewModelBase.cs" />
     <Compile Include="ucUnit.xaml.cs">
       <DependentUpon>ucUnit.xaml</DependentUpon>
     </Compile>
-    <Compile Include="model\CoAP\coapVariable.cs" />
+    <Compile Include="Model\Protocols\CoAP\coapVariable.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -198,6 +198,9 @@
       <Project>{ac744c57-e4a7-40f5-a021-50afa6a1f2bf}</Project>
       <Name>OnlineMonitoringLog.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="View\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

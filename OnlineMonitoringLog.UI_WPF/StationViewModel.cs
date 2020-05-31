@@ -12,10 +12,7 @@ namespace OnlineMonitoringLog.UI_WPF
     {
         public Station st;
         ReadOnlyObservableUnitCollection _units;
-        public StationViewModel()
-        {
-            st = new Station(new List<IUnit>() {new coapUnit(IPAddress.Parse("192.168.1.19")) });
-        }
+
         public StationViewModel StationViewModelBy(Station _St)
         {
             st = _St;

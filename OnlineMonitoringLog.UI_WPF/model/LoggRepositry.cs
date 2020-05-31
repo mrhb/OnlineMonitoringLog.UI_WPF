@@ -11,11 +11,12 @@ namespace OnlineMonitoringLog.UI_WPF.model
    public class LoggRepositry : AlarmRepository,ILoggRepository
     {
         protected LoggingContext _VarConfigContex;
-        public LoggRepositry(AlarmableContext Contex) : base(Contex)
+        public LoggRepositry(LoggingContext Contex) : base(Contex)
         {
+            _VarConfigContex = Contex;
         }
 
-        public RegisteredVarConfig ReadConfigInfo(RegisteredVarConfig Defaultconfig)
+        public RegisteredVarConfig ReadVarConfigInfo(RegisteredVarConfig Defaultconfig)
         {
             RegisteredVarConfig varConfig = _VarConfigContex.varConfig
                .Where(p => p.Fk_UnitEntityId == Defaultconfig.Fk_UnitEntityId &&
@@ -30,7 +31,7 @@ namespace OnlineMonitoringLog.UI_WPF.model
             return varConfig;
 
         }
-        public RegisteredVarConfig ReadConfigInfo(IVariable vari)
+        public RegisteredVarConfig ReadVarConfigInfo(IVariable vari)
         {
             var typ = vari.name;
             RegisteredVarConfig OccConfig = _VarConfigContex.varConfig
@@ -42,6 +43,9 @@ namespace OnlineMonitoringLog.UI_WPF.model
 
                 var NewOccConfig = new RegisteredVarConfig()
                 {
+                    Fk_UnitEntityId=vari.UnitId,
+                    resourceName=vari.name,
+                    
                     //Fk_AlarmableObjId = occ.ObjId,
                     //SerializedSetPoint = occ.SetPoint,
                     //OccKindName = typ,
