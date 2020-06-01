@@ -39,7 +39,12 @@ namespace OnlineMonitoringLog.UI_WPF.model
         }
 
     }
-
+    class hi : IntThreshold
+    {
+        public hi(int _objId) : base(_objId)
+        {
+        }
+    }
     public class ObjAddress
     {
         public const int InputWaterTemp = 1;

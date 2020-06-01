@@ -18,11 +18,11 @@ namespace OnlineMonitoringLog.UI_WPF.model
         CoapClient _CoapClient;
        public coapVariable(int unitId, IPAddress ip, string resourceName, ILoggRepository repo) : base(unitId, resourceName,repo)
         {
-            //_CoapClient = new CoapClient();
+            _CoapClient = new CoapClient();
             name = resourceName;
-            //_CoapClient.Uri = new Uri("coap://" + ip.ToString() + "/" + resourceName);
-            //_CoapClient.ObserveAsync();
-            //_CoapClient.Respond += RecievedRespond;
+            _CoapClient.Uri = new Uri("coap://" + ip.ToString() + "/" + resourceName);
+            _CoapClient.ObserveAsync();
+            _CoapClient.Respond += RecievedRespond;
         }
         private void RecievedRespond(object sender, ResponseEventArgs e)
         {

@@ -24,24 +24,14 @@ namespace OnlineMonitoringLog.UI_WPF.model
 
     public class IEC104Unit : Unit
     {
-        Timer generationTimer;
+      
         private Timer ConnectionTimer;
+        private ObservableCollection<IVariable> _iec104Variables = new ObservableCollection<IVariable>();
         
         public IEC104Unit(int unitId, IPAddress ip):base(unitId,ip)
-        {
-            generationTimer = new Timer(UpdateWithRandom, null, 0, 1000);
-            //ConnectionTimer = new Timer(ConnectToIec104Server, null, 0, 5000);
-            // ConnectToIec104Server(null);
-        }
-
-        private void UpdateWithRandom(object state)
-        {
-            var rnd = new Random();
-          foreach ( var item in Variables)
-            {
-                item.RecievedData(rnd.Next(100), DateTime.Now);
-              
-            }
+        {          
+            ConnectionTimer = new Timer(ConnectToIec104Server, null, 0, 5000);
+             ConnectToIec104Server(null);
         }
 
         private void ConnectToIec104Server(object state)
@@ -120,8 +110,8 @@ namespace OnlineMonitoringLog.UI_WPF.model
         {
             var resources = new List<IVariable>() {
                new iec104Variable(ID,ObjAddress.InputWaterTemp, "InputWaterTemp",repo),
-               //new iec104Variable(ID,ObjAddress.OutputWaterTemp, "OutputWaterTemp",repo),
-               //new iec104Variable(ID,ObjAddress.OilPress, "OilPress",repo),
+               new iec104Variable(ID,ObjAddress.OutputWaterTemp, "OutputWaterTemp",repo),
+               new iec104Variable(ID,ObjAddress.OilPress, "OilPress",repo),
                //new iec104Variable(ID,ObjAddress.AdvanceSpark, "AdvanceSpark",repo),
                //new iec104Variable(ID,ObjAddress.ValvePosition, "ValvePosition",repo),
                //new iec104Variable(ID,ObjAddress.ValveFlow, "ValveFlow",repo),
