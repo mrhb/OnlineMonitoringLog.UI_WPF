@@ -101,23 +101,12 @@
       <DependentUpon>202005301334005_LogVariableTables.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Model\Generics\Variable.cs" />
-    <Compile Include="Model\Entities\RegisteredVaraiableConfig.cs" />
     <Compile Include="Model\Protocols\CoAP\coapUnit.cs" />
-    <Compile Include="Model\Generics\Unit.cs" />
     <Compile Include="Model\Protocols\IEC104\iec104Variable.cs" />
     <Compile Include="Model\Protocols\IEC104\IEC104Unit.cs" />
-    <Compile Include="Model\Generics\IUnit.cs" />
-    <Compile Include="Model\Generics\IVariable.cs" />
-    <Compile Include="Model\ILoggRepository.cs" />
-    <Compile Include="Model\LoggableObj.cs" />
-    <Compile Include="Model\LoggRepositry.cs" />
-    <Compile Include="Model\Entities\MonitoringDbContext.cs" />
     <Compile Include="ViewModel\ReadOnlyObservableUnitCollection.cs" />
     <Compile Include="Model\Station.cs" />
-    <Compile Include="Model\Entities\UnitEntity.cs" />
     <Compile Include="Model\UnitFactory.cs" />
-    <Compile Include="Model\Entities\VariableLog.cs" />
     <Compile Include="ViewModel\viewModelBase.cs" />
     <Compile Include="ucUnit.xaml.cs">
       <DependentUpon>ucUnit.xaml</DependentUpon>
