@@ -24,4 +24,9 @@ namespace OnlineMonitoringLog.UI_WPF.model
          
         }
     }
+    public enum ProtocolType
+    {
+        CoAp,
+        IEC104
+    }
 }
