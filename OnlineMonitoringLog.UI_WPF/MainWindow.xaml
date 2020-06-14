@@ -8,7 +8,7 @@
  
         mc:Ignorable="d"
         xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
-        Title="Monitoring system for Units In a Station(CoAP Client)" Height="480" Width="634"
+        Title="Monitoring system for Units In a Station(IEC104/CoAP Client)" Height="480" Width="634"
         SizeToContent="WidthAndHeight">
     <Window.Resources>
         <local:StationViewModel x:Key="_Station"/>

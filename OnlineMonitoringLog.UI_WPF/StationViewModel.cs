@@ -5,6 +5,7 @@ using OnlineMonitoringLog.UI_WPF.model;
 using System.Collections.Generic;
 using System.Net;
 using System.Linq;
+using OnlineMonitoringLog.Core.Interfaces;
 
 namespace OnlineMonitoringLog.UI_WPF
 {
