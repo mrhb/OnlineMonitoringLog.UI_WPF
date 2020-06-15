@@ -1,16 +1,12 @@
 ﻿using OnlineMonitoringLog.UI_WPF.model;
 using System;
 using System.Windows;
-using System.Windows.Controls;
 
 using System.Linq;
 using System.Collections.Generic;
-using System.Net;
-using System.Windows.Data;
-using System.Threading;
-using lib60870.CS101;
-using lib60870.CS104;
-using lib60870;
+
+using OnlineMonitoringLog.Core;
+using OnlineMonitoringLog.Core.Interfaces;
 
 namespace OnlineMonitoringLog.UI_WPF
 {

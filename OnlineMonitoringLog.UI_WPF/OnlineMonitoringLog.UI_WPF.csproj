@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\EntityFramework.6.4.0\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -48,11 +47,19 @@
       <HintPath>..\..\OnlineMonitoringLog.Core\packages\CoAP.1.1.0\lib\net40\CoAP.NET.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="InfluxDB.Collector, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\InfluxDB.Collector.1.0.0\lib\net45\InfluxDB.Collector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="InfluxDB.LineProtocol, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\InfluxDB.LineProtocol.1.0.0\lib\net45\InfluxDB.LineProtocol.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -76,34 +83,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Migrations\202005050940089_AddStringIp.cs" />
-    <Compile Include="Migrations\202005050940089_AddStringIp.designer.cs">
-      <DependentUpon>202005050940089_AddStringIp.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202005170738591_addIpToUnits.cs" />
-    <Compile Include="Migrations\202005170738591_addIpToUnits.designer.cs">
-      <DependentUpon>202005170738591_addIpToUnits.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202005190605316_addProtocolType.cs" />
-    <Compile Include="Migrations\202005190605316_addProtocolType.designer.cs">
-      <DependentUpon>202005190605316_addProtocolType.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202005261029108_alarmableObjects.cs" />
-    <Compile Include="Migrations\202005261029108_alarmableObjects.designer.cs">
-      <DependentUpon>202005261029108_alarmableObjects.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202005300640306_changeUnitEntityName.cs" />
-    <Compile Include="Migrations\202005300640306_changeUnitEntityName.designer.cs">
-      <DependentUpon>202005300640306_changeUnitEntityName.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202005301334005_LogVariableTables.cs" />
-    <Compile Include="Migrations\202005301334005_LogVariableTables.designer.cs">
-      <DependentUpon>202005301334005_LogVariableTables.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Model\Protocols\CoAP\coapUnit.cs" />
-    <Compile Include="Model\Protocols\IEC104\iec104Variable.cs" />
-    <Compile Include="Model\Protocols\IEC104\IEC104Unit.cs" />
     <Compile Include="ViewModel\ReadOnlyObservableUnitCollection.cs" />
     <Compile Include="Model\Station.cs" />
     <Compile Include="Model\UnitFactory.cs" />
@@ -111,7 +90,6 @@
     <Compile Include="ucUnit.xaml.cs">
       <DependentUpon>ucUnit.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\Protocols\CoAP\coapVariable.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -144,24 +122,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Migrations\202005050940089_AddStringIp.resx">
-      <DependentUpon>202005050940089_AddStringIp.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202005170738591_addIpToUnits.resx">
-      <DependentUpon>202005170738591_addIpToUnits.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202005190605316_addProtocolType.resx">
-      <DependentUpon>202005190605316_addProtocolType.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202005261029108_alarmableObjects.resx">
-      <DependentUpon>202005261029108_alarmableObjects.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202005300640306_changeUnitEntityName.resx">
-      <DependentUpon>202005300640306_changeUnitEntityName.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202005301334005_LogVariableTables.resx">
-      <DependentUpon>202005301334005_LogVariableTables.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -187,19 +147,15 @@
       <Project>{ac744c57-e4a7-40f5-a021-50afa6a1f2bf}</Project>
       <Name>OnlineMonitoringLog.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\OnlineMonitoringLog.Drivers\OnlineMonitoringLog.Drivers\OnlineMonitoringLog.Drivers.csproj">
+      <Project>{b720cb3b-8100-43c1-8701-2ab0cc36ccb2}</Project>
+      <Name>OnlineMonitoringLog.Drivers</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="View\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.0\build\EntityFramework.props'))" />
-    <Error Condition="!Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.0\build\EntityFramework.targets'))" />
-  </Target>
-  <Import Project="..\packages\EntityFramework.6.4.0\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
