@@ -85,7 +85,6 @@
     </ApplicationDefinition>
     <Compile Include="ViewModel\ReadOnlyObservableUnitCollection.cs" />
     <Compile Include="Model\Station.cs" />
-    <Compile Include="Model\UnitFactory.cs" />
     <Compile Include="ViewModel\viewModelBase.cs" />
     <Compile Include="ucUnit.xaml.cs">
       <DependentUpon>ucUnit.xaml</DependentUpon>

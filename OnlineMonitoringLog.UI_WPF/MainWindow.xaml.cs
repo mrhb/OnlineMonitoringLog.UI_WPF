@@ -7,6 +7,7 @@ using System.Collections.Generic;
 
 using OnlineMonitoringLog.Core;
 using OnlineMonitoringLog.Core.Interfaces;
+using OnlineMonitoringLog.Drivers;
 
 namespace OnlineMonitoringLog.UI_WPF
 {
