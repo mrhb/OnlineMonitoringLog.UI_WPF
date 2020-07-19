@@ -21,7 +21,7 @@ namespace OnlineMonitoringLog.UI_WPF
             InitializeComponent();   
             using (var db = new LoggingContext())
             {
-                var UnitEntities = db.Units.ToList();
+                var UnitEntities = db.UnitEntity.ToList();
 
                 List<IUnit> iunits=new List<IUnit>();
                 foreach (var item in UnitEntities) {
